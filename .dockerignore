@@ -1,0 +1,4 @@
+node_modules
+*git*
+*.node_modules
+packages/walkin-orderx/e2e_tests

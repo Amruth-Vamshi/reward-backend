@@ -1,0 +1,15 @@
+.idea/
+node_modules/
+build/
+tmp/
+temp/
+.DS_Store
+dist/
+logs/
+swagger.yml
+
+# Redis file
+dump.rdb
+**/dump.rdb
+
+.env

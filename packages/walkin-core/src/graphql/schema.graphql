@@ -1,0 +1,3235 @@
+directive @auth(requires: [PermissionMap]) on FIELD_DEFINITION
+
+enum ACCESS_TYPE {
+  PRIVATE
+  PUBLIC
+}
+
+type Action {
+  id: ID
+  actionDefinition: ActionDefinition
+  organization: Organization
+  request: JSON
+  response: JSON
+  status: String
+}
+
+type ActionDefinition {
+  id: ID
+  name: String
+  type: String
+  organization: Organization
+  configuration: JSON
+  code: String
+  inputSchema: JSON
+  outputSchema: JSON
+  status: String
+}
+
+type ActionDefinitionPage {
+  data: [ActionDefinition!]
+  paginationInfo: PaginationInfo
+}
+
+type ActionPage {
+  data: [Action!]
+  paginationInfo: PaginationInfo
+}
+
+input addAudienceMemberInput {
+  audience_id: ID!
+  customer_id: ID!
+  status: STATUS!
+}
+
+input addCampaignControl {
+  organization_id: ID!
+  customer_id: ID!
+  campaign_id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+  status: STATUS!
+}
+
+input AddEntityExtend {
+  organization_id: ID!
+  entity_name: EXTEND_ENTITIES!
+  description: String!
+}
+
+input AddEntityExtendField {
+  entityExtendId: ID!
+  slug: String!
+  label: String
+  help: String
+  type: SLUGTYPE!
+  required: Boolean
+  choices: [String]
+  defaultValue: String
+  description: String
+  searchable: Boolean
+  validator: String
+}
+
+input addGlobalControl {
+  organization_id: ID!
+  customer_id: ID!
+  startTime: DateTime!
+  endTime: DateTime!
+}
+
+input AddVariableToMessageTemplateInput {
+  organization_id: ID!
+  templateId: ID!
+  templateVariableId: ID!
+}
+
+type APIKey {
+  id: ID!
+  environment: String
+  status: String
+  roles: [Role]
+  api_key: String
+}
+
+input APIKeyInput {
+  id: ID!
+  environment: EnvironmentEnum
+  status: STATUS
+}
+
+"""
+Skeloton of the Application data sent back to the user
+"""
+type Application {
+  """
+  Unique id of the application
+  """
+  id: ID!
+
+  """
+  Name of the application
+  """
+  name: String
+
+  """
+  Description of the organization
+  """
+  description: String
+
+  """
+  auth_key_hooks associated with this application
+  """
+  auth_key_hooks: String
+
+  """
+  Platform this application will run on
+  """
+  platform: String
+
+  """
+  Data of the organization to which the application belongs
+  """
+  organization: Organization
+
+  """
+  Actions associated with this application
+  """
+  actions: [Action]
+  apiKeys: APIKey
+}
+
+input ApplicationInput {
+  """
+  Name of the application
+  """
+  name: String!
+
+  """
+  Description of the organization
+  """
+  description: String
+
+  """
+  auth_key_hooks associated with this application
+  """
+  auth_key_hooks: String
+
+  """
+  Platform this application will run on
+  """
+  platform: String
+}
+
+"""
+Skeloton of the input receive by server to update Application
+"""
+input ApplicationUpdateInput {
+  """
+  Unique id of the application
+  """
+  id: ID!
+
+  """
+  Name of the application
+  """
+  name: String
+
+  """
+  Description of the organization
+  """
+  description: String
+
+  """
+  auth_key_hooks associated with this application
+  """
+  auth_key_hooks: String
+
+  """
+  Platform this application will run on
+  """
+  platform: String
+}
+
+type Audience {
+  id: ID
+  campaign: Campaign
+  segment: Segment
+  organization: Organization
+  application: Application
+  status: STATUS
+}
+
+type AudienceCountOutput {
+  count: Int
+}
+
+type AudienceMember {
+  id: ID!
+  audience: Audience!
+  customer: Customer!
+  status: STATUS!
+}
+
+type BasicField {
+  slug: String
+  label: String
+  type: SLUGTYPE
+  required: Boolean
+  defaultValue: String
+  searchable: Boolean
+  description: String
+}
+
+enum BUSINESS_RULE_LEVELS {
+  ORGANIZATION
+  STORE
+  APPLICATION
+  LOYALTY
+}
+
+type BusinessRule {
+  id: ID!
+  ruleLevel: BUSINESS_RULE_LEVELS!
+  ruleType: String!
+  ruleDefaultValue: String
+}
+
+input BusinessRuleConfigurationInput {
+  ruleLevel: BUSINESS_RULE_LEVELS
+  ruleLevelId: String
+  ruleType: String
+  organizationId: String!
+}
+
+type BusinessRuleDetail {
+  id: ID!
+  ruleLevel: BUSINESS_RULE_LEVELS!
+  ruleLevelId: String!
+  ruleType: String!
+  ruleValue: String
+}
+
+type Campaign {
+  createdBy: String
+  lastModifiedBy: String
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+  id: ID!
+  name: String
+  description: String
+  startTime: DateTime
+  endTime: DateTime
+  organization: Organization
+  application: Application
+  campaignType: String
+  triggerRule: Rule
+  status: STATUS
+  priority: Int
+  campaignStatus: String
+  audienceFilterRule: Rule
+}
+
+enum CAMPAIGN_TRIGGER_TYPE {
+  SCHEDULED
+  EVENT
+}
+
+enum CAMPAIGN_TYPE {
+  OFFER
+  FEEDBACK
+  MESSAGING
+  LOYALTY
+}
+
+type CampaignControl {
+  id: ID!
+  organization: Organization
+  customer: Customer
+  campaign: Campaign
+  startTime: DateTime
+  endTime: DateTime
+  status: STATUS
+}
+
+input CampaignUpdateInput {
+  name: String
+  description: String
+  campaignType: CAMPAIGN_TYPE
+  priority: Int
+  campaignTriggerType: CAMPAIGN_TRIGGER_TYPE
+  triggerRule: ID
+  isCampaignControlEnabled: Boolean
+  campaignControlPercent: Int
+  isGlobalControlEnabled: Boolean
+  startTime: DateTime
+  endTime: DateTime
+  audienceFilterRule: ID
+}
+
+input CampaingAddInput {
+  name: String!
+  description: String
+  campaignType: CAMPAIGN_TYPE!
+  priority: Int
+  campaignTriggerType: CAMPAIGN_TRIGGER_TYPE
+  triggerRule: ID
+  isCampaignControlEnabled: Boolean
+  campaignControlPercent: Int
+  isGlobalControlEnabled: Boolean
+  startTime: DateTime!
+  endTime: DateTime!
+  audienceFilterRule: ID
+  organization_id: ID!
+  application_id: ID
+}
+
+type Catalog {
+  id: ID!
+  name: String
+  catalogCode: String
+  description: String
+  organization: Organization
+  usage: CatalogUsage
+}
+
+input CatalogInput {
+  name: String!
+  catalogCode: String!
+  description: String
+  organizationId: ID!
+  usage: CatalogUsageInput
+}
+
+type CatalogUsage {
+  id: ID
+  purpose: String
+}
+
+input CatalogUsageInput {
+  purpose: String
+}
+
+type Category {
+  id: ID
+  name: String
+  description: String
+  code: String
+  extend: JSON
+  catalogId: ID
+  status: STATUS
+  products: [Product]
+  parent: Category
+  children: [Category]
+  catalog: Catalog
+}
+
+input CategoryInput {
+  id: ID
+  name: String
+  description: String
+  code: String
+  extend: JSON
+  status: STATUS
+}
+
+input CategorySearchInput {
+  name: String
+  description: String
+  code: String
+  status: STATUS
+}
+
+type Channel {
+  id: ID
+  name: String
+  organization: Organization
+  channelCode: String
+  chargeTypes: [Charge]
+}
+
+input ChannelFilterInput {
+  id: ID
+  name: String
+  channelCode: String
+}
+
+type ChannelPage {
+  data: [Channel]
+  paginationInfo: PaginationInfo
+}
+
+input ChannelTypeInput {
+  name: String!
+  channelCode: String!
+  chargeTypeCode: [String]
+}
+
+input ChannelTypeUpdateInput {
+  id: ID!
+  name: String
+  channelCode: String
+  chargeTypeCode: [String]
+}
+
+type Charge {
+  id: ID
+  name: String
+  organization: Organization
+  chargeTypeCode: String
+}
+
+input ChargeTypeCreateInput {
+  name: String!
+  chargeTypeCode: String!
+}
+
+input ChargeTypeInput {
+  id: ID
+  name: String
+  chargeTypeCode: String
+}
+
+input ChargeTypesInput {
+  chargeTypeCode: [String]
+}
+
+input ChargeTypeUpdateInput {
+  id: ID!
+  name: String
+  chargeTypeCode: String
+}
+
+enum COMBINATOR {
+  and
+  or
+}
+
+type Communication {
+  id: ID
+  entityId: String
+  entityType: COMMUNICATION_ENTITY_TYPE
+  messageTemplate: MessageTemplate
+  isScheduled: Boolean
+  firstScheduleDateTime: DateTime
+  isRepeatable: Boolean
+  lastProcessedDateTime: DateTime
+  repeatRuleConfiguration: RepeatRuleConfigurationOutput
+  commsChannelName: String
+  organization: Organization
+  application: Application
+  status: STATUS
+  campaign: Campaign
+}
+
+enum COMMUNICATION_DAYS {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum COMMUNICATION_ENTITY_TYPE {
+  CAMPAIGN
+  OFFER
+  LOYALTY
+}
+
+enum COMMUNICATION_FREQUENCY {
+  WEEKLY
+  MONTHLY
+  DAILY
+}
+
+enum COMMUNICATION_RUN_TYPE {
+  FIRST
+  REPEAT
+}
+
+enum COMMUNICATION_STATUS {
+  ADDED
+  STARTED
+  ERROR
+  COMPLETE
+}
+
+type CommunicationLog {
+  communication: Communication
+  startTime: DateTime
+  endTime: DateTime
+  runType: COMMUNICATION_RUN_TYPE
+  communicationStatus: COMMUNICATION_STATUS
+  log: JSON
+}
+
+input CommunicationLogInput {
+  communicationId: ID!
+  startTime: DateTime!
+  runType: COMMUNICATION_RUN_TYPE!
+  logMessage: String!
+}
+
+input CommunicationLogUpdateInput {
+  communicationLogId: ID!
+  communicationStatus: COMMUNICATION_STATUS!
+  logMessage: String!
+}
+
+type ConfirmEmailResponse {
+  userId: String
+  email: String
+  verified: Boolean
+}
+
+input CreateActionDefinitionInput {
+  name: String!
+  type: String!
+  organizationId: ID!
+  configuration: JSON!
+  code: String
+  inputSchema: JSON!
+  outputSchema: JSON!
+  status: String
+}
+
+input createAudienceInput {
+  campaign_id: ID!
+  segment_id: [ID]!
+  organization_id: ID!
+  application_id: ID
+  status: STATUS!
+}
+
+type CreateBulkCustomerResponse {
+  savedCustomers: [Customer]
+  validationErrors: [ValidationError]
+}
+
+input CreateBusinessRuleDetailInput {
+  ruleLevel: BUSINESS_RULE_LEVELS!
+  ruleLevelId: String!
+  ruleType: String!
+  ruleValue: String
+  organizationId: String!
+}
+
+input CreateBusinessRuleInput {
+  ruleLevel: BUSINESS_RULE_LEVELS!
+  ruleType: String!
+  ruleDefaultValue: String
+}
+
+input CreateCategoryInput {
+  name: String!
+  description: String!
+  status: STATUS!
+  code: String!
+  extend: JSON
+  catalogId: ID!
+  parentId: ID
+  organizationId: String!
+}
+
+input CreateCommunicationInput {
+  entityId: String!
+  entityType: COMMUNICATION_ENTITY_TYPE
+  messageTemplateId: ID!
+  isScheduled: Boolean!
+  firstScheduleDateTime: DateTime
+  isRepeatable: Boolean!
+  lastProcessedDateTime: DateTime
+  repeatRuleConfiguration: RepeatRuleConfiguration
+  commsChannelName: String!
+  organization_id: ID!
+  application_id: ID
+  campaign_id: ID!
+  status: STATUS!
+}
+
+input CreateCommunicationWithoutMessageTemplateIdInput {
+  entityId: String!
+  entityType: COMMUNICATION_ENTITY_TYPE
+  isScheduled: Boolean!
+  firstScheduleDateTime: DateTime
+  isRepeatable: Boolean!
+  lastProcessedDateTime: DateTime
+  repeatRuleConfiguration: RepeatRuleConfiguration
+  commsChannelName: String!
+  organization_id: ID!
+  application_id: ID
+  status: STATUS!
+}
+
+input CreateCommunicationWithoutMessageTemplateInput {
+  entityId: String!
+  entityType: COMMUNICATION_ENTITY_TYPE
+  isScheduled: Boolean!
+  firstScheduleDateTime: DateTime
+  isRepeatable: Boolean!
+  lastProcessedDateTime: DateTime
+  repeatRuleConfiguration: RepeatRuleConfiguration
+  commsChannelName: String!
+  organization_id: ID!
+  campaign_id: ID!
+  application_id: ID
+  status: STATUS!
+}
+
+input CreateFileSystemInput {
+  name: String!
+  description: String!
+  accessType: ACCESS_TYPE!
+  fileSystemType: FILE_SYSTEM_TYPE!
+  configuration: JSON!
+  enabled: Boolean!
+  organizationId: ID!
+}
+
+input CreateMessageTemplateInput {
+  name: String!
+  description: String!
+  messageFormat: MESSAGE_FORMAT!
+  templateBodyText: String!
+  templateSubjectText: String!
+  templateStyle: TEMPLATE_STYLE!
+  organization_id: ID!
+  url: String
+  imageUrl: String
+  status: STATUS!
+}
+
+input CreateMessageTemplateVariableInput {
+  name: String!
+  key: String!
+  type: VARIABLE_TYPE!
+  format: VARIABLE_FORMAT
+  defaultValue: String
+  required: Boolean!
+  organization_id: ID!
+  status: STATUS!
+}
+
+input CreateOrganizationInput {
+  name: String!
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalOrganizationId: String
+  code: String!
+  status: STATUS!
+  phoneNumber: String
+  website: String
+  extend: JSON
+  organizationType: OrganizationTypeEnum!
+}
+
+input CreateProductInput {
+  code: String!
+  name: String!
+  description: String
+  organizationId: ID!
+  imageUrl: String
+  type: ProductTypeEnum
+  sku: String
+  status: STATUS!
+  extend: JSON
+  categoryIds: [ID]!
+  optionIds: [ID]
+  variants: [CreateProductVariantInput!]
+}
+
+input CreateProductVariantInput {
+  sku: String!
+  optionValueIds: [ID!]!
+}
+
+input CreateRuleAttributeInput {
+  attributeName: String!
+  description: String
+  status: STATUS!
+  attributeValueType: VALUE_TYPE!
+  ruleEntityId: ID!
+  organizationId: ID!
+}
+
+input CreateRuleEntityInput {
+  entityName: String!
+  entityCode: String
+  status: STATUS!
+  organizationId: ID!
+}
+
+input CreateRuleInput {
+  name: String!
+  description: String
+  type: RULE_TYPE!
+  status: STATUS
+  ruleConfiguration: JSON
+  ruleExpression: JSON
+  organizationId: ID!
+}
+
+input CreateStoreAdminLevel {
+  name: String!
+  code: String!
+  parentId: ID
+}
+
+input CreateStoreInput {
+  name: String
+  STATUS: STATUS
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalStoreId: String
+  extend: JSON
+  code: String!
+  email: String
+  wifi: Boolean
+  latitude: String
+  longitude: String
+  adminLevelId: String
+  parentOrganizationId: String!
+  storeFormatCode: String
+  catalogCode: String
+  channelCode: String
+}
+
+type Customer {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  gender: String
+  dateOfBirth: String
+  externalCustomerId: String
+  customerIdentifier: String
+  organization: Organization
+  extend: JSON
+  onboardSource: String
+  customerDevices: [CustomerDevice]
+}
+
+type CustomerColumn {
+  column_slug: String
+  column_search_key: String
+  column_label: String
+  column_type: String
+  searchable: Boolean
+  extended_column: Boolean
+}
+
+type CustomerDefnition {
+  entityName: String
+  searchEntityName: String
+  columns: [CustomerColumn]
+}
+
+type CustomerDevice {
+  id: ID
+  fcmToken: String
+  deviceId: String
+  modelNumber: String
+  osVersion: String
+  status: String
+  extend: JSON
+  organization: Organization
+  customer: Customer
+}
+
+input CustomerDeviceInput {
+  id: String
+  fcmToken: String
+  customer_id: String
+  osVersion: String
+  deviceId: String
+  extend: JSON
+  modelNumber: String
+}
+
+input CustomerFields {
+  id: ID
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumer: String
+  gender: String
+  dateOfBirth: String
+  organization_id: String
+  status: STATUS
+}
+
+input CustomerFieldSearch {
+  id: ID
+  attributeName: String
+  attributeValue: String
+  expressionType: EXPRESSION_TYPE
+}
+
+input CustomerFileUploadInput {
+  file: Upload!
+  segmentName: String
+  organizationId: String
+}
+
+input CustomerInput {
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String!
+  gender: GENDER
+  dateOfBirth: String
+  externalCustomerId: String
+  customerIdentifier: String
+  organization: ID!
+  extend: JSON
+  onboard_source: String
+}
+
+input CustomerSearchFilters {
+  rules: [CustomerFieldSearch]
+  combinator: COMBINATOR
+}
+
+type CustomerSearchOutput {
+  data: [JSON]
+  total: Int
+  page: Int
+}
+
+scalar Date
+
+scalar DateTime
+
+enum DB_SOURCE {
+  CORE
+  WAREHOUSE
+}
+
+type DeleteOrganization {
+  name: String!
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalOrganizationId: String
+  code: String
+  status: STATUS!
+  phoneNumber: String
+  website: String
+  extend: JSON
+  organizationType: OrganizationTypeEnum
+}
+
+input DisableActionDefinitionInput {
+  id: ID!
+  organizationId: ID
+}
+
+input EndSessionInput {
+  id: ID!
+}
+
+enum ENTITY_TYPE {
+  INITIATED
+  FAILED
+  SUCCESS
+  TERMINATED
+  CANCELLED
+  JSON
+  XML
+  NOTIFICATION
+  EXTERNAL_API
+  CREATE_CUSTOMER_FEEDBACK_FORM
+  Organization
+  Product
+  Category
+  Order
+  Store
+  Customer
+  Campaign
+  Segment
+  Event
+  EventType
+}
+
+type EntityExtend {
+  id: ID!
+  entityName: EXTEND_ENTITIES!
+  description: String!
+  organization: Organization!
+  fields: [EntityExtendField]
+}
+
+type EntityExtendField {
+  id: ID!
+  slug: String!
+  label: String
+  help: String
+  type: SLUGTYPE!
+  required: Boolean!
+  choices: [String]
+  defaultValue: String
+  description: String
+  searchable: Boolean
+  validator: String
+}
+
+enum EnvironmentEnum {
+  TEST
+  PRODUCTION
+  DEVELOPMENT
+}
+
+type Event {
+  id: ID
+  sourceEventId: String
+  sourceEventTime: Date
+  sourceName: String
+  data: JSON
+  metadata: JSON
+  eventType: EventType
+  processedStatus: JSON
+}
+
+input EventInput {
+  sourceEventId: String
+  sourceEventTime: Date
+  sourceName: String
+  data: JSON
+  metadata: JSON
+  eventTypeCode: String!
+}
+
+type EventSubscription {
+  id: ID!
+  triggerAction: TriggerActionEnum
+  customAction: Action
+  eventType: EventType
+  sync: Boolean
+  status: String
+}
+
+type EventType {
+  id: ID!
+  code: String
+  description: String
+  status: STATUS
+  application: Application
+  eventSubscriptions: [EventSubscription]
+  events: [Event]
+}
+
+enum EXPRESSION_TYPE {
+  EQUALS
+  NOT_EQUALS
+  LESS_THAN
+  GREATER_THAN
+  LESS_THAN_OR_EQUAL
+  GREATER_THAN_OR_EQUAL
+  LIKE
+  IN
+}
+
+enum EXTEND_ENTITIES {
+  Customer
+  CustomerSearch
+  CustomerDevice
+  Product
+  Store
+  Organization
+  User
+  Session
+  Category
+}
+
+type File {
+  id: ID!
+  name: String
+  mimeType: String
+  encoding: String
+  description: String
+  internalUrl: String
+  publicUrl: String
+  status: STATUS
+  organization: Organization
+  fileSystem: FileSystem
+}
+
+enum FILE_SYSTEM_TYPE {
+  S3
+  CLOUDINARY
+}
+
+type FilesPage {
+  data: [File!]
+  paginationInfo: PaginationInfo
+}
+
+type FileSystem {
+  id: ID
+  name: String
+  description: String
+  accessType: ACCESS_TYPE
+  fileSystemType: FILE_SYSTEM_TYPE
+  configuration: JSON
+  enabled: Boolean
+  status: STATUS
+  organization: Organization
+}
+
+type FileSystemsPage {
+  data: [FileSystem!]
+  paginationInfo: PaginationInfo
+}
+
+input FileUploadInput {
+  file: Upload!
+  description: String
+  fileSystemId: String
+  organizationId: String
+}
+
+enum FORMAT {
+  JSON
+  XML
+}
+
+type FormatMessage {
+  templateId: ID
+  variables: JSON
+  bodyText: String
+  subjectText: String
+  templateStyle: TEMPLATE_STYLE
+}
+
+input FormatMessageInput {
+  organization_id: ID!
+  templateId: ID!
+  variables: JSON!
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  OTHERS
+}
+
+type GlobalControl {
+  id: ID!
+  organization: Organization
+  customer: Customer
+  startTime: DateTime
+  endTime: DateTime
+  status: STATUS
+}
+
+scalar JSON
+
+type JWT {
+  jwt: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Member {
+  applicationId: ID
+  application: Application
+  user: User
+  Role: String
+}
+
+enum MESSAGE_FORMAT {
+  SMS
+  PUSH
+  EMAIL
+}
+
+type MessageTemplate {
+  id: ID!
+  name: String
+  description: String
+  messageFormat: MESSAGE_FORMAT
+  templateBodyText: String
+  templateSubjectText: String
+  templateStyle: TEMPLATE_STYLE
+  organization: Organization
+  messageTemplateVariables: [MessageTemplateVariable]
+  status: STATUS
+}
+
+type MessageTemplateVariable {
+  id: ID!
+  name: String
+  key: String
+  type: VARIABLE_TYPE!
+  format: VARIABLE_FORMAT!
+  defaultValue: String
+  required: Boolean
+  organization: Organization
+  status: STATUS
+}
+
+type Metric {
+  id: ID
+  name: String
+  description: String
+  query: String
+  type: METRIC_TYPE
+  filters: [MetricFilter]
+  organization: Organization
+  status: STATUS
+  source: DB_SOURCE
+}
+
+enum METRIC_FILTER_TYPE {
+  NUMBER
+  STRING
+  DATETIME
+}
+
+enum METRIC_TYPE {
+  SCALAR
+  SEQUENCE
+  MATRIX
+}
+
+input MetricAddInput {
+  name: String!
+  description: String!
+  query: String!
+  type: METRIC_TYPE!
+  filters: [String]!
+  organizationId: ID
+  source: DB_SOURCE!
+}
+
+type MetricExecutionResult {
+  name: String
+  type: METRIC_TYPE
+  rows: Int
+  cols: Int
+  headers: [String]
+  data: JSON
+  total: Int
+}
+
+type MetricExecutionResultPage {
+  data: [MetricExecutionResult]
+  paginationInfo: PaginationInfo
+}
+
+type MetricFilter {
+  id: ID
+  name: String
+  key: String
+  type: METRIC_FILTER_TYPE
+  status: STATUS
+  organization: Organization
+}
+
+input MetricFilterAddInput {
+  key: String!
+  name: String!
+  type: METRIC_FILTER_TYPE!
+  organizationId: ID
+}
+
+type MetricFilterPage {
+  data: [MetricFilter]
+  paginationInfo: PaginationInfo
+}
+
+input MetricFilterUpdateInput {
+  id: ID!
+  name: String
+  type: METRIC_FILTER_TYPE
+  key: String
+  status: STATUS
+  organizationId: ID!
+}
+
+type MetricPage {
+  data: [Metric!]
+  paginationInfo: PaginationInfo
+}
+
+input MetricUpdateInput {
+  id: ID!
+  name: String
+  description: String
+  query: String
+  organizationId: ID!
+  type: METRIC_TYPE
+  filters: [String]
+  status: STATUS
+  source: DB_SOURCE
+}
+
+type Mutation {
+  createMetric(input: MetricAddInput): Metric
+  updateMetric(input: MetricUpdateInput): Metric
+  createMetricFilter(input: MetricFilterAddInput): MetricFilter
+  updateMetricFilter(input: MetricFilterUpdateInput): MetricFilter
+  createWebhookEventType(input: WebhookEventTypeAddInput): WebhookEvent
+  updateWebhookEventType(input: WebhookEventTypeUpdateInput): WebhookEvent
+  createWebhook(input: WebhookAddInput): Webhook
+  updateWebhook(input: WebhookUpdateInput): Webhook
+  createWebhookEventData(input: WebhookEventDataAddInput): WebhookEventData
+  updateWebhookEventData(input: WebhookEventDataUpdateInput): WebhookEventData
+  createUser(
+    input: UserCreateInput!
+    createOrganization: CreateOrganizationInput
+    walkinProducts: [walkinProducts]
+  ): User
+  updateUser(input: UserUpdateInput): User
+  deleteUserById(id: String): Boolean
+  linkApplicationToUser(userId: String, applicationID: String): User
+  addUserToOrganization(
+    userData: UserCreateInput!
+    organization_id: ID!
+    role_id: ID
+  ): User
+  updatePassword(
+    oldPassword: String
+    newPassword: String
+  ): UpdatePasswordResponse
+  confirmEmail(email: String, emailToken: String): ConfirmEmailResponse
+  sendPasswordResetLink(email: String): ResetPasswordResponse
+  createOrganization(
+    organizationInput: CreateOrganizationInput!
+    parentId: ID
+    walkinProducts: [walkinProducts]
+    adminUserInput: UserCreateInput
+  ): Organization
+  deleteOrganization(id: ID!): DeleteOrganization!
+  updateOrganization(organization: UpdateOrganizationInput!): Organization!
+  deleteOrganizationHierarchy(id: ID!): [DeleteOrganization]
+  linkUserToOrganization(organizationId: ID!, userId: ID!): Organization
+  linkOrganizationToparent(organizationId: ID!, parentId: ID!): Organization
+  linkOrganizationToWalkinProducts(
+    organizationId: ID!
+    walkinProducts: [walkinProducts]
+  ): Organization
+  linkOrganizationToMetrics(
+    organizationId: ID!
+    walkinProducts: [walkinProducts]
+  ): [Metric]
+
+  """
+  Generate a API key for the application
+  """
+  generateAPIKey(
+    """
+    Unique id of the application for which API key needs to be generated
+    """
+    id: ID!
+    environment: String
+  ): APIKey
+
+  """
+  Delete an application from the database
+  """
+  deleteApplication(
+    """
+    Unique id of the application which needs to be deleted
+    """
+    id: ID!
+  ): Boolean
+
+  """
+  Update information of already existing application
+  """
+  updateApplication(input: ApplicationUpdateInput!): Application
+  updateAPIKey(input: APIKeyInput): APIKey
+
+  """
+   Create an application for an organization
+  """
+  createApplication(
+    """
+     Unique id of the organization for which application needs to created
+    """
+    organizationId: ID!
+    input: ApplicationInput!
+  ): Application
+  login(input: LoginInput!): JWT!
+  logout(input: Boolean): Boolean
+  refreshToken(jwt: String!): JWT!
+  addRole(input: RoleInput!): Role
+  editRole(input: RoleEditInput!): Role
+  deleteRole(id: ID!): Role
+  addPolicyToRole(roleId: ID!, input: PolicyInput!): Policy
+  addPoliciesToRole(roleId: ID!, inputs: [PolicyInput]!): Role
+  removePolicyFromRole(roleId: ID!, policyId: ID!): Role
+  removePoliciesFromRole(roleId: ID!, policyIds: [ID!]!): Role
+  editPolicy(input: PolicyEditInput!): Policy
+  linkUserToRole(roleId: ID!, userId: ID!): User
+  linkUsersToRole(roleId: ID!, userIds: [ID!]!): [User]
+  linkRolesToUser(roleIds: [ID!]!, userId: ID!): User
+  unlinkUserToRole(roleId: ID!, userId: ID!): User
+  unlinkUsersFromRole(roleId: ID!, userIds: [ID!]!): [User]
+  unlinkRolesFromUser(roleIds: [ID!]!, userId: ID!): User
+  createStoreAdminLevel(input: CreateStoreAdminLevel!): StoreAdminLevel
+  updateStoreAdminLevel(input: UpdateStoreAdminLevel!): StoreAdminLevel
+  updateStore(input: UpdateStoreInput!): Store
+  createStore(input: CreateStoreInput!): Store
+  updateStoreByCode(input: CreateStoreInput!): Store
+  pushEvents(events: [EventInput]!): [Event]
+  processEventById(id: ID!): JSON
+  createEventSubscription(
+    eventTypeId: ID!
+    triggerAction: TriggerActionEnum!
+    customActionId: ID
+  ): EventSubscription
+  deleteEventSubscription(id: ID!): TypeDeleteEventSubscription
+  createEventType(
+    code: String!
+    description: String
+    applicationId: ID!
+  ): EventType
+  updateEventType(
+    id: ID!
+    code: String
+    description: String
+    status: STATUS
+  ): EventType
+  deleteEventType(id: ID!): TypeDeleteEvent
+  createRuleEntity(input: CreateRuleEntityInput!): RuleEntity
+  disableRuleEntity(id: ID!): RuleEntity
+  createRuleAttribute(input: CreateRuleAttributeInput!): RuleAttribute
+  disableRuleAttribute(id: ID!): RuleAttribute
+  createRule(input: CreateRuleInput!): Rule
+  updateRule(id: ID!, input: UpdateRuleInput!): Rule
+  disableRule(id: ID!): Rule
+  createBusinessRule(input: CreateBusinessRuleInput): BusinessRule
+  updateBusinessRule(id: ID!, input: UpdateBusinessRuleInput): BusinessRule
+  deleteBusinessRule(id: ID!): BusinessRule
+  createBusinessRuleDetail(
+    input: CreateBusinessRuleDetailInput
+  ): BusinessRuleDetail
+  updateBusinessRuleDetail(
+    id: ID!
+    input: UpdateBusinessRuleDetailInput
+  ): BusinessRuleDetail
+  deleteBusinessRuleDetail(id: ID!): BusinessRuleDetail
+  updateBusinessRuleByRuleType(input: CreateBusinessRuleInput): BusinessRule
+  createWorkflow(input: WorkflowInput): Workflow
+  createWorkflowWithChildren(input: WorkflowWithChildrenInput): Workflow
+  updateWorkflow(input: UpdateWorkflowInput): Workflow
+  createWorkflowProcess(input: WorkflowProcessInput): WorkflowProcess
+  updateWorkflowProcess(input: UpdateWorkflowProcessInput): WorkflowProcess
+  createWorkflowProcessTransition(
+    input: WorkflowProcessTransitionInput
+  ): WorkflowProcessTransition
+  updateWorkflowProcessTransition(
+    input: UpdateWorkflowProcessTransitionInput
+  ): WorkflowProcessTransition
+  createWorkflowState(input: WorkflowStateInput): WorkflowState
+  updateWorkflowState(input: UpdateWorkflowStateInput): WorkflowState
+  createWorkflowEntity(input: WorkflowEntityInput): WorkflowEntity
+  updateWorkflowEntity(input: UpdateWorkflowEntityInput): WorkflowEntity
+  addWorkflowEnityTransitionStatus(
+    input: WorkflowEntityTransitionInput
+  ): WorkflowEntityTransition
+  createWorkflowRoute(input: WorkflowRouteInput): WorkflowRoute
+  updateWorkflowRoute(input: UpdateWorkflowRouteInput): WorkflowRoute
+  createCustomer(customer: CustomerInput!): Customer
+  createBulkCustomer(customers: [CustomerInput]!): CreateBulkCustomerResponse
+  updateCustomer(customer: UpdateCustomerInput): UpdateCustomer
+  createCustomerDevice(customerDevice: CustomerDeviceInput!): CustomerDevice
+  updateCustomerDevice(
+    customerDevice: UpdateCustomerDeviceInput!
+  ): CustomerDevice
+  disableCustomer(customer: CustomerInput!): Customer
+  disableCustomerDevice(customerDevice: CustomerDeviceInput!): CustomerDevice
+  uploadFileForCreateBulkCustomer(
+    input: CustomerFileUploadInput
+  ): UploadFileForCreateBulkCustomerResponse
+
+  """
+   Creates new entry for entityExtend
+  """
+  addEntityExtend(input: AddEntityExtend!): EntityExtend
+
+  """
+   Creates new entry for entity extend fields
+  """
+  addEntityExtendField(input: AddEntityExtendField!): EntityExtendField
+  createActionDefinition(input: CreateActionDefinitionInput): ActionDefinition
+  updateActionDefinition(input: UpdateActionDefinitionInput): ActionDefinition
+  disableActionDefinition(id: ID!, organizationId: ID): Int
+  executeAction(actionDefinitionName: String!, request: JSON): Action
+  startSession(input: StartSessionInput): Session
+  endSession(input: EndSessionInput): Session
+  createSegmentForCustomers(
+    customerPhoneNumbers: [String]
+    segmentName: String
+  ): Segment
+  createSegment(input: SegmentAddInput): Segment
+  updateSegment(input: SegmentUpdateInput): Segment
+  disableSegment(id: ID!): Segment
+  createCampaign(input: CampaingAddInput): Campaign
+  updateCampaign(id: ID!, input: CampaignUpdateInput): Campaign
+  launchCampaign(id: ID!): Campaign
+  preprocessLaunchCampaign(id: ID!): Campaign
+  pauseCampaign(id: ID!): Campaign
+  unpauseCampaign(id: ID!): Campaign
+  completeCampaign(id: ID!): Campaign
+  abandonCampaign(id: ID!): Campaign
+  disableCampaign(id: ID!): Campaign
+  linkCampaignToApplication(campaignId: ID!, applicationId: ID!): Campaign
+  unlinkCampaignFromApplication(campaignId: ID!, applicationId: ID!): Campaign
+  jobManageEndedCampaigns: Boolean
+  createAudience(input: createAudienceInput): [Audience]
+  updateAudience(input: updateAudienceInput): Audience
+  createAudienceForCampaign(campaignId: ID, segments: [ID]!): [Audience]
+  createCampaignControl(input: addCampaignControl): CampaignControl
+  updateCampaignControl(input: updateCampaignControl): CampaignControl
+  createGlobalControl(input: addGlobalControl): GlobalControl
+  deactivateGlobalControl(id: ID!): GlobalControl
+  createAudienceMember(input: addAudienceMemberInput): AudienceMember
+  updateAudienceMember(input: updateAudienceMemberInput): AudienceMember
+  createFileSystem(input: CreateFileSystemInput!): FileSystem
+  updateFileSystem(input: UpdateFileSystemInput!): FileSystem
+  deleteFileSystem(id: ID!, organizationId: ID): Boolean
+  generateSignedUploadURL(input: SignedUploadURLInput!): SignedURL
+  uploadFile(input: FileUploadInput!): File
+  updateFile(file: Upload!, input: UpdateUploadFileInput!): File
+  deleteFile(id: ID!, organizationId: ID): Boolean
+  createMessageTemplate(input: CreateMessageTemplateInput!): MessageTemplate
+  updateMessageTemplate(input: UpdateMessageTemplateInput!): MessageTemplate
+  createMessageTemplateVariable(
+    input: CreateMessageTemplateVariableInput!
+  ): MessageTemplateVariable
+  updateMessageTemplateVariable(
+    input: UpdateMessageTemplateVariableInput!
+  ): MessageTemplateVariable
+  addVariableToMessageTemplate(
+    input: AddVariableToMessageTemplateInput!
+  ): MessageTemplate
+  removeVariableFromMessageTemplate(
+    input: RemoveVariableFromMessageTemplateInput!
+  ): MessageTemplate
+  formatMessage(input: FormatMessageInput!): FormatMessage
+  sendMessage(input: SendMessageInput!): Boolean
+  createCommunicationWithMessageTempate(
+    communicationInput: CreateCommunicationWithoutMessageTemplateInput!
+    messageTemplateInput: CreateMessageTemplateInput
+  ): Communication
+  updateCommunicationWithMessageTempate(
+    communicationInput: UpdateCommunicationInput!
+    messageTemplateInput: UpdateMessageTemplateInput
+  ): Communication
+  createCommunication(input: CreateCommunicationInput!): Communication
+  updateCommunication(input: UpdateCommunicationInput!): Communication
+  disableCommunication(id: ID!, organization: ID!): Communication
+  addCommunicationLog(input: CommunicationLogInput!): CommunicationLog
+  updateCommunicationLog(input: CommunicationLogUpdateInput!): CommunicationLog
+  createCatalog(input: CatalogInput!): Catalog!
+  updateCatalog(input: UpdateCatalogInput!): Catalog!
+  createCategory(input: CreateCategoryInput!): Category!
+  updateCategory(input: UpdateCategoryInput!): Category!
+  disableCategory(id: ID!): Category!
+  createOption(input: OptionInput): Option
+  updateOption(input: UpdateOptionInput): Option
+  createOptionValue(input: OptionValueInput): OptionValue
+  updateOptionValue(input: UpdateOptionValueInput): OptionValue
+  createProduct(input: CreateProductInput!): Product
+  updateProduct(input: UpdateProductInput!): Product
+  disableProduct(productName: String!): Product
+  createCategoryProductOption(
+    input: CategoryProductOptionInput
+  ): CategoryProductOption
+  updateCategoryProductOption(
+    input: UpdateCategoryProductOptionInput
+  ): CategoryProductOption
+  createProductVariant(input: ProductVariantInput): ProductVariant
+  updateProductVariant(input: UpdateProductVariantInput): ProductVariant
+  createProductVariantValue(
+    input: ProductVariantValueInput
+  ): ProductVariantValue
+  updateProductVariantValue(
+    input: UpdateProductVariantValueInput
+  ): ProductVariantValue
+  createProductCategory(input: ProductCategoryInput): ProductCategory
+  updateProductCategory(input: UpdateProductCategoryInput): ProductCategory
+  createChargeType(input: ChargeTypeCreateInput): Charge
+  updateChargeType(input: ChargeTypeUpdateInput): Charge
+  deleteChargeType(id: ID!): Boolean
+  createChannel(input: ChannelTypeInput): Channel
+  updateChannel(input: ChannelTypeUpdateInput): Channel
+  deleteChannel(id: ID!): Boolean
+  createTaxType(input: TaxTypeInput): TaxType
+  updateTaxType(id: ID!, input: TaxTypeInput): TaxType
+  createStoreFormat(input: StoreFormatInput): StoreFormat
+  updateStoreFormat(id: ID!, input: StoreFormatInput): StoreFormat
+  addReportConfig(
+    name: String!
+    description: String!
+    organizationId: ID!
+  ): ReportConfig
+  deactivateReportConfig(id: ID!, organizationId: ID!): Boolean
+  addReport(
+    reportConfigId: ID!
+    reportFileId: ID!
+    reportDate: Date!
+    organizationId: ID!
+  ): Report
+  deleteReport(id: ID!, organizationId: ID!): Boolean
+}
+
+type Option {
+  id: ID
+  name: String
+  description: String
+  optionValues: [OptionValue]
+}
+
+input OptionInput {
+  name: String!
+  description: String
+  optionValues: [ValueInput]
+}
+
+type OptionValue {
+  id: ID
+  value: String
+  option: Option
+}
+
+input OptionValueInput {
+  optionId: ID!
+  value: String
+}
+
+enum ORDER {
+  ASC
+  DESC
+}
+
+type Organization {
+  id: ID!
+  webhooks(event: String, status: STATUS): [Webhook]
+  name: String!
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalOrganizationId: String
+  code: String
+  status: STATUS!
+  phoneNumber: String
+  website: String
+  extend: JSON
+  organizationType: OrganizationTypeEnum
+  applications: [Application]
+  parent: Organization
+  children: [Organization]
+  store: Store
+  users: [User]
+  walkinProducts: [WalkinProduct]
+  rules: [Rule]
+  workflows: [Workflow]
+  actions: [Action]
+}
+
+enum OrganizationTypeEnum {
+  ORGANIZATION
+  STORE
+}
+
+input PageOptions {
+  page: Int = 1
+  pageSize: Int = 10
+}
+
+type PaginationInfo {
+  totalPages: Int
+  totalItems: Int
+  page: Int
+  perPage: Int
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
+}
+
+input PermissionMap {
+  resource: POLICY_RESOURCES
+  permission: POLICY_PERMISSIONS
+}
+
+type Policy {
+  id: ID!
+  effect: POLICY_EFFECTS
+  resource: POLICY_RESOURCES
+  permission: POLICY_PERMISSIONS
+  type: POLICY_TYPES
+  accessLevel: POLICY_LEVELS
+}
+
+enum POLICY_EFFECTS {
+  ALLOW
+  DENY
+}
+
+enum POLICY_LEVELS {
+  OWN
+  ALL
+}
+
+enum POLICY_PERMISSIONS {
+  VIEW
+  MODIFY
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  LIST
+  SEARCH
+  EXECUTE
+}
+
+enum POLICY_RESOURCES {
+  ORGANIZATION
+  USER
+  APPLICATION
+  STORE
+  ROLE
+  CATALOG
+  CATEGORY
+  PRODUCT
+  WEBHOOKS
+  EVENTS
+  PLACES
+  CUSTOMER
+  CUSTOMER_DEVICE
+  FEEDBACK_CATEGORY
+  FEEDBACK_FORM
+  FEEDBACK_RESPONSE
+  FEEDBACK_QUESTION
+  FEEDBACK_CHOICE
+  APIKEY
+  ACTION
+  ACTION_DEFNITION
+  AUDIENCE
+  BUSINESS_RULE
+  CAMPAIGN
+  COMMUNICATION
+  ENTITY_EXTEND
+  EVENT
+  FILE_SYSTEM
+  MEMBER
+  METRIC
+  METRIC_FILTER
+  POLICY
+  RULE
+  SEGMENT
+  SESSION
+  WORKFLOW
+  REPORT_CONFIG
+  REPORTS
+  FILE
+  CUSTOMER_FEEDBACK
+  TAXTYPE
+  STOREFORMAT
+  REFINEX_CONSOLE
+  DOWNLOAD_EVENTS
+  DOWNLOAD_CUSTOMERS
+  SETTINGS_GLOBAL
+  SETTINGS_NEARX
+  UPLOAD_PLACES
+}
+
+enum POLICY_TYPES {
+  UI
+  ENTITY
+}
+
+input PolicyEditInput {
+  id: ID!
+  effect: POLICY_EFFECTS
+  resource: POLICY_RESOURCES
+  permission: POLICY_PERMISSIONS
+  accessLevel: POLICY_LEVELS
+  type: POLICY_TYPES
+}
+
+input PolicyInput {
+  effect: POLICY_EFFECTS
+  resource: POLICY_RESOURCES
+  permission: POLICY_PERMISSIONS
+  type: POLICY_TYPES
+  accessLevel: POLICY_LEVELS
+}
+
+input ProcessEventInput {
+  id: ID!
+  sourceEventId: String
+  sourceEventTime: Date
+  sourceName: String
+  data: JSON
+  metadata: JSON
+  eventTypeCode: String!
+}
+
+type Product {
+  id: ID
+  code: String
+  name: String
+  description: String
+  imageUrl: String
+  sku: String
+  type: ProductTypeEnum
+  extend: JSON
+  status: STATUS
+  organization: Organization
+  variants: [ProductVariant]
+}
+
+type ProductCategory {
+  id: ID
+  category: Category
+  product: Product
+}
+
+input ProductCategoryInput {
+  productId: ID!
+  categoryId: ID!
+}
+
+type CategoryProductOption {
+  id: ID
+  option: Option
+  product: Product
+}
+
+input CategoryProductOptionInput {
+  optionId: ID!
+  productId: ID!
+}
+
+input ProductSearchInput {
+  categoryId: ID
+  organizationId: ID!
+}
+
+enum ProductTypeEnum {
+  REGULAR
+  VARIANT
+  FIXED_BUNDLE
+  DYNAMIC_BUNDLE
+}
+
+type ProductVariant {
+  id: ID
+  sku: String
+  product: Product
+  optionValues: [OptionValue]
+}
+
+input ProductVariantInput {
+  sku: String!
+  productId: ID!
+}
+
+type ProductVariantValue {
+  id: ID
+  productVariant: ProductVariant
+  optionValue: OptionValue
+}
+
+input ProductVariantValueInput {
+  productVariantId: ID!
+  optionValueId: ID!
+}
+
+type Query {
+  metric(id: ID!, organizationId: ID): Metric
+  metrics(
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+    organizationId: ID
+    status: STATUS!
+  ): MetricPage
+  metricFilter(id: ID!, organizationId: ID): MetricFilter
+  metricFilters(
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+    status: STATUS!
+    organizationId: ID
+  ): MetricFilterPage
+  executeMetric(
+    name: String
+    organizationId: ID
+    filterValues: JSON
+  ): MetricExecutionResult
+  executeMetrics(
+    names: [String]
+    organizationId: ID
+    walkinProducts: WALKIN_PRODUCTS!
+    filterValues: JSON
+  ): MetricExecutionResultPage
+  webhookEventType(organizationId: ID!, event: String!): WebhookEvent
+  webhookEventTypes(
+    organizationId: ID!
+    status: STATUS!
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): WebhookEventPage
+  webhook(organizationId: ID!, id: ID!): Webhook
+  webhooks(
+    organizationId: ID!
+    event: String
+    status: STATUS!
+    enabled: Boolean
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): WebhookPage
+  webhookEventData(
+    organizationId: ID!
+    webhookId: ID!
+    httpStatus: String
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): WebhookEventDataPage
+  users(
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+    organizationId: String!
+  ): UserPage
+  user(id: ID!, organizationId: String!): User
+  organizationHierarchies: [JSON]
+  organizationHierarchy(rootId: ID!): JSON
+  organization(id: ID!): Organization
+  organizationRoots: [Organization]
+  subOrganizations(
+    parentId: ID!
+    type: OrganizationTypeEnum
+    status: STATUS
+  ): [Organization]
+
+  """
+  Fetch all the Applications data from the server
+  """
+  applications: [Application!]!
+
+  """
+  Fetch a single Application data for the unique id provided
+  """
+  application(
+    """
+    Unique id of the Application which need to be fetched from the Server
+    """
+    id: ID!
+  ): Application
+  roles: [Role]
+  role(id: ID!): Role
+  store(id: ID!): Store
+  stores: [Store]
+  storeByCode(code: String!): Store
+  storeSearch(
+    organizationId: ID!
+    filterValues: StoreSearchFilters
+    pageNumber: Int!
+    sort: Sort
+  ): StoreSearchOutput
+  storeDefnition(organizationId: ID!): StoreDefnition
+  eventById(id: ID!): Event
+  eventBySourceEventId(sourceEventId: String!, eventTypeId: ID): Event
+  eventsByFilters(sourceName: String, eventTypeCode: String): [Event]
+  eventSubscriptionsForEventType(eventTypeId: ID!): [EventSubscription]
+  eventSubscriptionById(id: ID!): EventSubscription
+  eventTypeById(id: ID!): EventType
+  eventTypeByCode(code: String!): EventType
+  eventTypesForApplication(appId: ID!): [EventType]
+  ruleEntity(id: ID!): RuleEntity
+  ruleEntities(input: SearchRuleEntityInput): [RuleEntity]
+  ruleAttribute(id: ID!): RuleAttribute
+  ruleAttributes(input: SearchRuleAttributeInput!): [RuleAttribute]
+  rule(id: ID!): Rule
+  rules(input: SearchRuleInput): [Rule]
+  getSQLFromRule(ruleId: ID!): SQL
+  evaluateRule(ruleName: String, data: JSON!, ruleId: ID): RuleEvaluatioResult
+  businessRules(input: SearchBusinessRulesInput!): [BusinessRule]
+  businessRule(id: ID!): BusinessRule
+  businessRuleDetails(
+    input: SearchBusinessRuleDetailsInput!
+  ): [BusinessRuleDetail]
+  businessRuleDetail(id: ID!): BusinessRuleDetail
+  businessRuleConfiguration(input: BusinessRuleConfigurationInput!): String!
+  workflow(id: ID!): Workflow
+  workflowByName(name: String!, organizationId: String!): Workflow
+  workflowDiagram(id: ID!): workflowDiagram
+  workflows: [Workflow]
+  orgWorkflows(orgId: ID!): [Workflow]
+  workflowState(id: ID!): WorkflowState
+  workflowStates(workflowId: ID!): [WorkflowState]
+  workflowProcess(id: ID!): WorkflowProcess
+  workflowProcessByName(name: String!, workflowId: String!): Workflow
+  workflowProcesses(workflowId: ID!): [WorkflowProcess]
+  workflowProcessTransition(id: ID!): WorkflowProcessTransition
+  workflowProcessTransitions(
+    workflowProcessId: ID!
+  ): [WorkflowProcessTransition]
+  workflowEntity(id: ID!): WorkflowEntity
+  workflowEntityByEntityDetails(
+    entityId: String!
+    entityType: WORKFLOW_ENTITY_TYPE!
+  ): WorkflowEntity
+  workflowEntityTransition(id: ID!): WorkflowEntityTransition
+  workflowEntityTransitionByEntityId(
+    workflowEntityId: ID!
+  ): WorkflowEntityTransition
+  workflowEntityTransitionHistory(
+    workflowEntityId: ID!
+  ): [WorkflowEntityTransitionHistory]
+  workflowRoute(id: ID!): WorkflowRoute
+  workflowRoutes(
+    organizationId: ID!
+    entityType: WORKFLOW_ENTITY_TYPE!
+  ): [WorkflowRoute]
+  customer(input: SearchCustomerInput): Customer
+  customers: [Customer]
+  customerDevice(input: SearchCustomerDeviceInput): CustomerDevice
+  customerDefnition(organization_id: ID!): CustomerDefnition
+  customerDevicesByCustomerId(customerId: String!): [CustomerDevice]
+  customerDevices: [CustomerDevice]
+  customerCount: JSON
+  customerSearch(
+    organizationId: ID!
+    filterValues: CustomerSearchFilters
+    pageNumber: Int!
+    sort: Sort
+  ): CustomerSearchOutput
+  getSegmentRuleAsText(ruleId: ID): JSON
+
+  """
+   Fetches entityNames
+  """
+  entities: [EXTEND_ENTITIES]
+
+  """
+   Fetches all extended entities, specific to organization
+  """
+  entityExtend(id: ID!): EntityExtend
+
+  """
+   Fetches all extended entities, specific to organization
+  """
+  entityExtendByName(entityName: EXTEND_ENTITIES!): EntityExtend
+
+  """
+   Fetches corresponding fields of the extended entities specific to organization
+  """
+  entityExtendField(id: ID!): EntityExtendField
+
+  """
+   Fetches basic fields of an entity
+  """
+  basicFields(entityName: EXTEND_ENTITIES!): [BasicField]
+  actionDefinition(id: ID!, organizationId: ID): ActionDefinition
+  actionDefinitions(
+    organizationId: ID
+    name: String
+    type: String
+    status: String = "ACTIVE"
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions = {}
+  ): ActionDefinitionPage
+  action(id: ID!, organizationId: ID): Action
+  actions(
+    organizationId: ID
+    actionDefinitionName: String
+    status: String = "ACTIVE"
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions = {}
+  ): ActionPage
+  session(id: ID!): Session
+  activeSession(customer_identifier: String!, organization_id: ID!): Session
+  segment(id: ID!): Segment
+  segments(
+    name: String
+    organization_id: ID!
+    application_id: ID
+    segmentType: String
+    status: STATUS!
+  ): [Segment]
+  campaign(id: ID!): Campaign
+  campaigns(
+    organization_id: ID
+    application_id: ID
+    campaignType: [String]
+    status: STATUS!
+  ): [Campaign]
+  audience(id: ID!): Audience
+  audiences(
+    organization_id: ID!
+    application_id: ID
+    campaign_id: ID
+    segment_id: ID
+    status: STATUS
+  ): [Audience]
+  campaignControls(
+    organization_id: ID!
+    campaign_id: ID!
+    customer_id: ID
+  ): [CampaignControl]
+  globalControls(organization_id: ID!, customer_id: ID): [GlobalControl]
+  audienceCount(segments: [ID], organizationId: ID!): AudienceCountOutput
+  audienceMembers(audience_id: ID!, customer_id: ID): [AudienceMember]
+
+  """
+  Outputs totalAudienceCount for a campaign. Executes rule associated to campaign & audiences
+  """
+  totalAudienceCountForCampaign(campaignId: ID!): AudienceCountOutput
+  fileSystem(id: ID!, organizationId: ID): FileSystem
+  fileSystems(
+    name: String
+    accessType: String
+    fileSystemType: String
+    status: String
+    organizationId: ID!
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions = {}
+  ): FileSystemsPage
+  file(id: ID!, organizationId: ID): File
+  files(
+    fileSystemId: ID
+    name: String
+    status: String
+    organizationId: ID!
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions = {}
+  ): FilesPage
+  messageTemplate(id: ID!, organization_id: ID!): MessageTemplate
+  messageTemplates(
+    organization_id: ID!
+    messageFormat: MESSAGE_FORMAT
+    status: STATUS
+  ): [MessageTemplate]
+  communication(id: ID!, organization_id: ID!): Communication
+  communications(
+    entityId: ID
+    entityType: COMMUNICATION_ENTITY_TYPE
+    organization_id: ID!
+    status: STATUS
+    campaignId: ID
+  ): [Communication]
+  communicationLog(communicationLogId: ID!): CommunicationLog
+  communicationLogs(communicationId: ID!): [CommunicationLog]
+  catalog(id: ID!): Catalog
+  catalogs(organizationId: ID!): [Catalog]
+  category(id: ID!): Category
+  categoryByCode(catalogId: ID!, categoryCode: String!): Category
+  categoriesWithChildren(catalogId: ID!, categoryCode: String): Category
+  categories(catalogId: ID!, parentCategoryId: ID): [Category]
+  optionById(id: ID!): Option
+  options: [Option]
+  optionValuesByOptionId(optionId: ID!): [OptionValue]
+  products(input: ProductSearchInput): [Product]
+  productOptionsByProductId(productId: ID!): [CategoryProductOption]
+  productVariantsByProductId(productId: ID!): [ProductVariant]
+  productVariantValuesByProductVariantId(
+    productVariantId: ID!
+  ): [ProductVariantValue]
+  productCategoriesByCategoryId(categoryId: ID!): [ProductCategory]
+  productCategoriesByCategoryCode(categoryCode: String!): [ProductCategory]
+  chargeTypes(input: ChargeTypesInput): [Charge]
+  chargeType(input: ChargeTypeInput): Charge
+  channels: [Channel]
+  channel(input: ChannelFilterInput): ChannelPage
+  taxType(id: ID!, status: STATUS, organizationId: ID): TaxType
+  taxTypes(
+    status: STATUS
+    organizationId: ID
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): TaxTypePage
+  storeFormat(id: ID!, status: STATUS, organizationId: ID): StoreFormat
+  storeFormats(
+    status: STATUS
+    organizationId: ID
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): StoreFormatPage
+  reportConfig(id: ID!, organizationId: ID!): ReportConfig
+  reportConfigs(
+    organizationId: ID!
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): ReportConfigPage
+  report(id: ID!, organizationId: ID!): Report
+  reports(
+    reportConfigId: ID!
+    reportDate: Date!
+    organizationId: ID!
+    pageOptions: PageOptions = { page: 1, pageSize: 10 }
+    sortOptions: SortOptions
+  ): ReportPage
+}
+
+input RemoveVariableFromMessageTemplateInput {
+  organization_id: ID!
+  templateId: ID!
+  templateVariableId: ID!
+}
+
+input RepeatRuleConfiguration {
+  frequency: COMMUNICATION_FREQUENCY
+  repeatInterval: Int
+  endAfter: DateTime
+  byWeekDay: [COMMUNICATION_DAYS]
+  byMonthDate: Int
+  time: String
+  noOfOccurances: Int
+}
+
+type RepeatRuleConfigurationOutput {
+  frequency: COMMUNICATION_FREQUENCY
+  repeatInterval: Int
+  endAfter: DateTime
+  byWeekDay: [COMMUNICATION_DAYS]
+  byMonthDate: Int
+  time: String
+  noOfOccurances: Int
+}
+
+type Report {
+  id: ID!
+  reportConfig: ReportConfig
+  organizationId: ID!
+  reportDate: Date
+  reportFile: File
+  status: STATUS
+}
+
+type ReportConfig {
+  id: ID!
+  name: String
+  description: String
+  organizationId: ID!
+  status: STATUS
+}
+
+type ReportConfigPage {
+  data: [ReportConfig!]
+  paginationInfo: PaginationInfo
+}
+
+type ReportPage {
+  data: [Report!]
+  paginationInfo: PaginationInfo
+}
+
+enum REQUEST_METHOD {
+  POST
+  GET
+}
+
+type ResetPasswordResponse {
+  userId: String
+  email: String
+  sentLink: Boolean
+}
+
+type Role {
+  id: ID!
+  name: String
+  description: String
+  tags: [String]
+  policies: [Policy]
+  users: [User]
+  createdBy: String
+  lastModifiedBy: String
+  createdTime: String
+  lastModifiedTime: String
+}
+
+input RoleEditInput {
+  id: ID!
+  name: String
+  description: String
+  tags: [String]
+}
+
+input RoleInput {
+  name: String!
+  description: String
+  tags: [String]
+}
+
+type Rule {
+  id: ID!
+  name: String
+  description: String
+  status: STATUS
+  type: RULE_TYPE
+  ruleConfiguration: JSON
+  ruleExpression: JSON
+  organization: Organization
+}
+
+enum RULE_TYPE {
+  SIMPLE
+  CUSTOM
+}
+
+type RuleAttribute {
+  id: ID
+  attributeName: String
+  description: String
+  status: STATUS
+  attributeValueType: String
+  organization: Organization!
+  ruleEntity: RuleEntity!
+}
+
+type RuleEntity {
+  id: ID
+  entityName: String
+  entityCode: String
+  status: STATUS
+  organization: Organization
+  ruleAttributes: [RuleAttribute]
+}
+
+type RuleEvaluatioResult {
+  id: ID
+  name: String
+  description: String
+  status: STATUS
+  type: RULE_TYPE
+  ruleConfiguration: JSON
+  ruleExpression: JSON
+  evaluationResult: JSON
+  organization: Organization
+}
+
+input RuleInputType {
+  attributeName: String!
+  attributeValue: String!
+  expressionType: EXPRESSION_TYPE!
+}
+
+type S3Response {
+  url: String
+  expiry: String
+}
+
+input SearchBusinessRuleDetailsInput {
+  ruleLevel: BUSINESS_RULE_LEVELS
+  ruleLevelId: String
+  ruleType: String
+  organizationId: String
+}
+
+input SearchBusinessRulesInput {
+  ruleLevel: BUSINESS_RULE_LEVELS
+  ruleType: String
+}
+
+input SearchCustomerDeviceInput {
+  id: ID
+  fcmToken: String
+  deviceId: String
+  modelNumber: String
+  customerId: String
+}
+
+input SearchCustomerInput {
+  id: ID
+  externalCustomerId: String
+  organization_id: ID
+  customerIdentifier: String
+}
+
+input SearchRuleAttributeInput {
+  status: STATUS
+  organizationId: ID!
+  entityName: String
+}
+
+input SearchRuleEntityInput {
+  status: STATUS
+  organizationId: ID!
+  entityName: String
+}
+
+input SearchRuleInput {
+  status: STATUS
+  organizationId: ID!
+}
+
+type Segment {
+  createdBy: String
+  lastModifiedBy: String
+  createdTime: DateTime
+  lastModifiedTime: DateTime
+  id: ID!
+  name: String
+  description: String
+  segmentType: String
+  organization: Organization
+  application: Application
+  rule: Rule
+  status: STATUS
+}
+
+enum SEGMENT_TYPE {
+  CUSTOM
+}
+
+input SegmentAddInput {
+  name: String!
+  description: String
+  segmentType: SEGMENT_TYPE!
+  organization_id: ID!
+  application_id: ID!
+  rule_id: ID!
+  status: STATUS!
+}
+
+input SegmentUpdateInput {
+  id: ID!
+  name: String
+  description: String
+  segmentType: SEGMENT_TYPE
+  rule_id: ID
+  status: STATUS
+}
+
+input SendMessageInput {
+  format: MESSAGE_FORMAT
+  to: String!
+  messageBody: String!
+  messageSubject: String
+}
+
+type Session {
+  id: ID!
+  customer_id: ID!
+  organization_id: ID!
+  extend: JSON
+  status: STATUS
+}
+
+input SignedUploadURLInput {
+  name: String!
+  description: String
+  status: STATUS
+  organizationId: String!
+  fileSystemId: String!
+}
+
+type SignedURL {
+  s3Response: S3Response
+  cloudinaryResponse: JSON
+}
+
+enum SLUGTYPE {
+  DATE
+  TIMESTAMP
+  TIME
+  SHORT_TEXT
+  LONG_TEXT
+  NUMBER
+  CHOICES
+  BOOLEAN
+  JSON
+}
+
+input Sort {
+  attributeName: String
+  order: ORDER
+}
+
+input SortOptions
+
+type SQL {
+  SQL: String
+}
+
+input StartSessionInput {
+  customer_identifier: String!
+  organization_id: ID!
+  extend: JSON
+}
+
+enum STATUS {
+  ACTIVE
+  INACTIVE
+}
+
+type Store {
+  id: ID!
+  name: String
+  STATUS: STATUS
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalStoreId: String
+  code: String
+  extend: JSON
+  email: String
+  wifi: Boolean
+  latitude: String
+  longitude: String
+  adminLevelId: String
+  organization: Organization
+  storeFormats: [StoreFormat]
+  catalog: Catalog
+  channels: [Channel]
+}
+
+type StoreAdminLevel {
+  id: ID
+  name: String
+  code: String
+  parent: StoreAdminLevel
+  stores: [Store]
+}
+
+type StoreColumn {
+  column_slug: String
+  column_search_key: String
+  column_label: String
+  column_type: String
+  searchable: Boolean
+  extended_column: Boolean
+}
+
+type StoreDefnition {
+  entityName: String
+  searchEntityName: String
+  columns: [StoreColumn]
+}
+
+input StoreFieldSearch {
+  id: ID
+  attributeName: String
+  attributeValue: String
+  expressionType: EXPRESSION_TYPE
+}
+
+type StoreFormat {
+  id: ID
+  name: String
+  description: String
+  storeFormatCode: String
+  status: STATUS
+  organization: Organization
+  taxTypes: [TaxType]
+}
+
+input StoreFormatInput {
+  name: String
+  description: String
+  storeFormatCode: String!
+  status: STATUS
+  organization: ID
+  taxTypeCodes: [String]
+}
+
+type StoreFormatPage {
+  data: [StoreFormat]
+  paginationInfo: PaginationInfo
+}
+
+input StoreFormatSearchInput {
+  status: STATUS
+  organizationId: ID
+}
+
+input StoreSearchFilters {
+  rules: [StoreFieldSearch]
+  combinator: COMBINATOR
+}
+
+type StoreSearchOutput {
+  data: [JSON]
+  total: Int
+  page: Int
+}
+
+type TaxType {
+  id: ID
+  name: String
+  taxTypeCode: String
+  description: String
+  status: STATUS
+  organization: Organization
+}
+
+input TaxTypeInput {
+  name: String
+  taxTypeCode: String!
+  description: String
+  status: STATUS
+  organization: ID
+}
+
+type TaxTypePage {
+  data: [TaxType]
+  paginationInfo: PaginationInfo
+}
+
+input TaxTypeSearchInput {
+  status: STATUS
+  organizationId: ID
+}
+
+enum TEMPLATE_STYLE {
+  MUSTACHE
+}
+
+enum TriggerActionEnum {
+  NEARX
+  CUSTOM
+  WEBHOOK
+  REFINEX_SEND_FEEDBACK
+}
+
+type TypeDeleteEvent {
+  id: ID!
+  code: String
+  description: String
+  status: STATUS
+  application: Application
+  eventSubscriptions: [EventSubscription]
+  events: [Event]
+}
+
+type TypeDeleteEventSubscription {
+  triggerAction: TriggerActionEnum
+  customAction: Action
+  eventType: EventType
+  sync: Boolean
+  status: String
+}
+
+input UpdateActionDefinitionInput {
+  id: ID!
+  name: String
+  type: String
+  organizationId: ID
+  configuration: JSON
+  code: String
+  inputSchema: JSON
+  outputSchema: JSON
+  status: String
+}
+
+input updateAudienceInput {
+  id: ID!
+  status: STATUS
+}
+
+input updateAudienceMemberInput {
+  id: ID!
+  status: STATUS
+}
+
+input UpdateBusinessRuleDetailInput {
+  ruleLevel: BUSINESS_RULE_LEVELS
+  ruleLevelId: String
+  ruleType: String
+  ruleValue: String
+  organizationId: String!
+}
+
+input UpdateBusinessRuleInput {
+  ruleLevel: BUSINESS_RULE_LEVELS
+  ruleType: String
+  ruleDefaultValue: String
+}
+
+input updateCampaignControl {
+  id: ID!
+  endTime: DateTime
+  status: STATUS
+}
+
+input UpdateCatalogInput {
+  id: ID!
+  name: String
+  usage: UpdateCatalogUsageInput
+}
+
+input UpdateCatalogUsageInput {
+  id: ID!
+  purpose: String
+}
+
+input UpdateCategoryInput {
+  id: ID!
+  name: String
+  description: String
+  catalogId: ID
+  status: STATUS
+  extend: JSON
+  code: String
+  parentId: ID
+  organizationId: String!
+}
+
+input UpdateCommunicationInput {
+  id: ID!
+  entityId: String!
+  entityType: COMMUNICATION_ENTITY_TYPE
+  isScheduled: Boolean
+  firstScheduleDateTime: DateTime
+  isRepeatable: Boolean
+  lastProcessedDateTime: DateTime
+  repeatRuleConfiguration: RepeatRuleConfiguration
+  commsChannelName: String
+  status: STATUS!
+  campaign_id: ID
+}
+
+type UpdateCustomer {
+  id: ID
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  gender: String
+  dateOfBirth: String
+  externalCustomerId: String
+  customerIdentifier: String
+  organization: Organization
+  extend: JSON
+  onboard_source: String
+  customerDevices: [CustomerDevice]
+}
+
+input UpdateCustomerDeviceInput {
+  id: ID!
+  fcmToken: String
+  modelNumber: String
+  extend: JSON
+  deviceId: String
+  customerId: String
+}
+
+input UpdateCustomerInput {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+  phoneNumber: String
+  gender: GENDER
+  dateOfBirth: String
+  externalCustomerId: String
+  customerIdentifier: String
+  extend: JSON
+  organization: ID
+}
+
+input UpdateFileSystemInput {
+  id: ID!
+  name: String
+  description: String
+  accessType: ACCESS_TYPE
+  fileSystemType: FILE_SYSTEM_TYPE
+  configuration: JSON
+  enabled: Boolean
+  organizationId: ID!
+}
+
+input UpdateMessageTemplateInput {
+  id: ID!
+  organization_id: ID
+  name: String
+  description: String
+  templateBodyText: String
+  templateSubjectText: String
+  templateStyle: TEMPLATE_STYLE
+  url: String
+  imageUrl: String
+  status: STATUS
+}
+
+input UpdateMessageTemplateVariableInput {
+  id: ID!
+  organization_id: ID!
+  name: String
+  type: VARIABLE_TYPE!
+  format: VARIABLE_FORMAT!
+  defaultValue: String
+  required: Boolean
+  status: STATUS
+}
+
+input UpdateOptionInput {
+  id: ID!
+  name: String!
+  description: String
+}
+
+input UpdateOptionValueInput {
+  id: ID!
+  optionId: ID!
+  value: String
+}
+
+input UpdateOrganizationInput {
+  id: ID!
+  name: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalOrganizationId: String
+  code: String
+  status: STATUS
+  phoneNumber: String
+  website: String
+  extend: JSON
+  organizationType: OrganizationTypeEnum
+}
+
+type UpdatePasswordResponse {
+  updated: Boolean
+}
+
+input UpdateProductCategoryInput {
+  id: ID!
+  productId: ID!
+  categoryId: ID!
+}
+
+input UpdateProductInput {
+  id: ID!
+  name: String!
+  description: String
+  organizationId: ID!
+  imageUrl: String
+  type: ProductTypeEnum
+  sku: String
+  status: STATUS
+  extend: JSON
+}
+
+input UpdateCategoryProductOptionInput {
+  id: ID!
+  optionId: ID
+  productId: ID
+}
+
+input UpdateProductVariantInput {
+  id: ID!
+  sku: String
+  productId: ID!
+}
+
+input UpdateProductVariantValueInput {
+  id: ID!
+  productVariantId: ID!
+  optionValueId: ID!
+}
+
+input UpdateRuleInput {
+  name: String
+  description: String
+  type: RULE_TYPE
+  ruleConfiguration: JSON
+  ruleExpression: JSON
+}
+
+input UpdateStoreAdminLevel {
+  id: ID!
+  name: String!
+  code: String!
+  parentId: ID
+}
+
+input UpdateStoreInput {
+  id: ID!
+  name: String
+  STATUS: STATUS
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  pinCode: String
+  country: String
+  externalStoreId: String
+  extend: JSON
+  code: String
+  email: String
+  wifi: Boolean
+  latitude: String
+  longitude: String
+  adminLevelId: String
+  parentOrganizationId: String!
+  storeFormatCode: String
+  catalogCode: String
+  channelCode: String
+}
+
+input UpdateUploadFileInput {
+  id: ID!
+  name: String
+  description: String
+  fileSystemId: String
+  organizationId: String!
+}
+
+input UpdateWorkflowEntityInput {
+  id: ID!
+  workflowId: ID!
+  entityId: ID!
+  entityType: WORKFLOW_ENTITY_TYPE
+}
+
+input UpdateWorkflowInput {
+  id: ID!
+  name: String
+  description: String
+  organizationId: ID
+}
+
+input UpdateWorkflowProcessInput {
+  id: ID!
+  name: String
+  description: String
+  workflowId: ID
+}
+
+input UpdateWorkflowProcessTransitionInput {
+  id: ID!
+  name: String
+  pickupStateId: ID
+  dropStateId: ID
+  ruleConfig: String
+  workflowProcessId: ID
+}
+
+input UpdateWorkflowRouteInput {
+  id: ID!
+  entityType: WORKFLOW_ENTITY_TYPE
+  ruleId: ID
+  status: STATUS
+}
+
+input UpdateWorkflowStateInput {
+  id: ID!
+  code: Int
+  name: String
+  description: String
+  workflowId: ID
+}
+
+scalar Upload
+
+type UploadFileForCreateBulkCustomerResponse {
+  rowCount: Int
+  createdCount: Int
+  failedCount: Int
+  createBulkCustomerResponse: CreateBulkCustomerResponse
+  segmentResponse: Segment
+}
+
+type User {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  extend: JSON
+  status: STATUS
+  members: [Member]
+  organization: Organization
+  createdCampaigns: [Campaign]
+  roles: [Role]
+  permissionMap(types: [POLICY_TYPES]): JSON
+}
+
+input UserCreateInput {
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+}
+
+type UserPage {
+  data: [User!]
+  paginationInfo: PaginationInfo
+}
+
+input UserUpdateInput {
+  id: ID!
+  email: String
+  firstName: String
+  lastName: String
+  extend: JSON
+  status: STATUS
+}
+
+type ValidationError {
+  phoneNumber: String
+  errors: [String]
+}
+
+enum VALUE_TYPE {
+  NUMBER
+  STRING
+  OBJECT
+  BOOLEAN
+  ARRAY
+}
+
+input ValueInput {
+  value: String
+}
+
+enum VARIABLE_FORMAT {
+  YYYYMMDD
+  HHMM
+  NO_FORMATING
+}
+
+enum VARIABLE_TYPE {
+  STRING
+  NUMBER
+  DATE
+}
+
+enum WALKIN_PRODUCTS {
+  REFINEX
+  NEARX
+  REWARDX
+  HYPERX
+}
+
+type WalkinProduct {
+  id: ID
+  name: String
+  description: String
+  latest_version: String
+  status: STATUS
+}
+
+enum walkinProducts {
+  REFINEX
+  NEARX
+  REWARDX
+  HYPERX
+}
+
+type Webhook {
+  id: ID!
+  name: String!
+  organization: Organization!
+  event: String!
+  url: String!
+  headers: JSON!
+  method: String!
+  enabled: Boolean!
+  status: STATUS
+}
+
+input WebhookAddInput {
+  organizationId: ID!
+  event: String!
+  name: String!
+  url: String!
+  headers: JSON!
+  method: REQUEST_METHOD!
+}
+
+input WebhookDeleteInput {
+  id: ID!
+  organizationId: ID!
+}
+
+type WebhookEvent {
+  id: ID!
+  event: String!
+  description: String!
+  status: STATUS
+}
+
+type WebhookEventData {
+  id: ID!
+  webhook: Webhook
+  data: JSON!
+  httpStatus: String!
+  status: STATUS
+}
+
+input WebhookEventDataAddInput {
+  webhookId: ID!
+  organizationId: ID!
+  data: String!
+}
+
+input WebhookEventDataDeleteInput {
+  id: ID!
+  organizationId: ID!
+}
+
+type WebhookEventDataPage {
+  data: [WebhookEventData!]
+  paginationInfo: PaginationInfo
+}
+
+input WebhookEventDataUpdateInput {
+  id: ID!
+  organizationId: ID!
+  httpStatus: String
+  status: STATUS
+  webhookId: ID!
+}
+
+type WebhookEventPage {
+  data: [WebhookEvent!]
+  paginationInfo: PaginationInfo
+}
+
+input WebhookEventTypeAddInput {
+  event: String!
+  description: String!
+  organizationId: ID!
+}
+
+input WebhookEventTypeDeleteInput {
+  id: ID!
+  organizationId: ID!
+}
+
+input WebhookEventTypeUpdateInput {
+  id: ID!
+  organizationId: ID!
+  description: String
+  status: STATUS
+}
+
+type WebhookPage {
+  data: [Webhook!]
+  paginationInfo: PaginationInfo
+}
+
+type WebhookTypePage {
+  data: [WebhookEvent!]
+  paginationInfo: PaginationInfo
+}
+
+input WebhookUpdateInput {
+  id: ID!
+  organizationId: ID!
+  url: String
+  name: String
+  headers: JSON
+  method: String
+  status: STATUS
+  enabled: Boolean
+}
+
+type Workflow {
+  id: ID!
+  name: String!
+  description: String!
+  organization: Organization
+  workflowProcesses: [WorkflowProcess]
+}
+
+enum WORKFLOW_ENTITY_TYPE {
+  Campaign
+  Offer
+}
+
+input WorkflowChildrenProcessInput {
+  name: String!
+  description: String!
+  workflowProcessTransitions: [WorkflowChildrenProcessTransitionInput]!
+}
+
+input WorkflowChildrenProcessTransitionInput {
+  name: String!
+  pickupStateName: String!
+  dropStateName: String!
+  ruleConfig: String!
+}
+
+input WorkflowChildrenStateInput {
+  name: String!
+  description: String!
+}
+
+type workflowDiagram {
+  id: ID!
+  name: String!
+  description: String!
+  diagram: String!
+}
+
+type WorkflowEntity {
+  id: ID!
+  workflow: Workflow
+  entityId: ID!
+  entityType: WORKFLOW_ENTITY_TYPE
+  currentTransition: WorkflowEntityTransition
+  transitionHistory: [WorkflowEntityTransitionHistory]
+}
+
+input WorkflowEntityInput {
+  workflowId: ID!
+  entityId: ID!
+  entityType: WORKFLOW_ENTITY_TYPE!
+}
+
+type WorkflowEntityTransition {
+  id: ID!
+  workflowEntityId: ID!
+  workflowProcessTransitionId: ID!
+  workflowProcessTransition: WorkflowProcessTransition
+}
+
+type WorkflowEntityTransitionHistory {
+  id: ID!
+  workflowEntityId: ID!
+  workflowProcessTransitionId: ID!
+  workflowProcessTransition: WorkflowProcessTransition
+}
+
+input WorkflowEntityTransitionInput {
+  workflowEntityId: ID!
+  workflowProcessTransitionId: ID!
+}
+
+input WorkflowInput {
+  name: String!
+  description: String!
+  organizationId: ID!
+}
+
+type WorkflowProcess {
+  id: ID!
+  name: String!
+  description: String!
+  workflow: Workflow
+  workflowProcessTransitions: [WorkflowProcessTransition]
+}
+
+input WorkflowProcessInput {
+  name: String!
+  description: String!
+  workflowId: ID!
+}
+
+type WorkflowProcessTransition {
+  id: ID!
+  name: String!
+  pickupState: WorkflowState
+  dropState: WorkflowState
+  ruleConfig: String
+}
+
+input WorkflowProcessTransitionInput {
+  name: String!
+  pickupStateId: ID!
+  dropStateId: ID!
+  ruleConfig: String!
+  workflowProcessId: ID!
+}
+
+type WorkflowRoute {
+  id: ID
+  entityType: WORKFLOW_ENTITY_TYPE
+  organization: Organization
+  rule: Rule
+  workflow: Workflow
+  status: STATUS
+}
+
+input WorkflowRouteInput {
+  entityType: WORKFLOW_ENTITY_TYPE!
+  organizationId: ID!
+  ruleId: ID!
+  workflowId: ID!
+}
+
+type WorkflowState {
+  id: ID!
+  code: Int!
+  name: String!
+  description: String!
+  workflow: Workflow
+}
+
+input WorkflowStateInput {
+  name: String!
+  code: Int!
+  description: String!
+  workflowId: ID!
+}
+
+input WorkflowWithChildrenInput {
+  name: String!
+  description: String!
+  organizationId: ID!
+  workflowProcesses: [WorkflowChildrenProcessInput]!
+  workflowStates: [WorkflowChildrenStateInput]!
+}

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "allowJs": false,
+    "experimentalDecorators": true,
+    "lib": [
+      "es2017",
+      "esnext.asynciterable",
+      "es5",
+      "es6",
+      "dom",
+      "dom.iterable"
+    ],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "declaration": false
+  },
+  "include": [
+    "packages/walkin-core",
+    "packages/walkin-rewardx",
+    "packages/walkin-platform-server",
+    "packages/walkin-queue-processor",
+    "packages/walkin-seeds"
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.integration.ts"]
+}

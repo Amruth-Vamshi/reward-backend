@@ -1,0 +1,51 @@
+FROM maven:3-jdk-8
+
+RUN cp /usr/share/zoneinfo/Asia/Kolkata /etc/localtime && echo "Asia/Kolkata" > /etc/timezone
+
+WORKDIR /app
+
+COPY . /app
+ENV JAVA_HOME=/usr/local/openjdk-8
+ENV TYPEORM_CONNECTION=mysql
+ENV TYPEORM_HOST=206.189.137.69
+ENV TYPEORM_USERNAME=wcore_db_user
+ENV TYPEORM_PASSWORD=pheic8thai2Nae6
+ENV TYPEORM_DATABASE=wcore_dev_db
+ENV TYPEORM_PORT=3306
+ENV DELIVERY_SERVICE_URL=http://localhost:9001/
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs && \
+    npm install -g yarn
+RUN apt-get update && apt-get install -y \
+	apt-transport-https \
+	ca-certificates \
+	curl \
+	gnupg \
+	--no-install-recommends \
+	&& curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
+	&& echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
+	&& apt-get update && apt-get install -y \
+	google-chrome-stable \
+	fontconfig \
+	fonts-ipafont-gothic \
+	fonts-wqy-zenhei \
+	fonts-thai-tlwg \
+	fonts-kacst \
+	fonts-symbola \
+	fonts-noto \
+	fonts-freefont-ttf \
+	--no-install-recommends \
+	&& apt-get purge --auto-remove -y curl gnupg \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Add Chrome as a user
+RUN groupadd -r chrome && useradd -r -g chrome -G audio,video chrome \
+	&& mkdir -p /home/chrome && chown -R chrome:chrome /home/chrome
+RUN yarn
+RUN chmod +x karate_run_test.sh
+RUN /bin/bash karate_run_test.sh
+

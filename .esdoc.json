@@ -1,0 +1,28 @@
+{
+  "source": "./packages",
+  "destination": "./docs",
+  "plugins": [
+    {
+      "name": "esdoc-standard-plugin",
+      "brand": {
+        "title": "Walkin API",
+        "description": "Docs for Walkin Platform"
+      }
+    },
+    {
+      "name": "esdoc-ecmascript-proposal-plugin",
+      "option": {
+        "all": true
+      }
+    }
+  ],
+  "includes": [
+    "\\.providers.js$"
+  ],
+  "excludes": [
+    "\\.module\\.js$",
+    "\\.resolvers\\.js$",
+    "\\.typeDefs\\.js$",
+    "walkin-queue-processor"
+  ]
+}

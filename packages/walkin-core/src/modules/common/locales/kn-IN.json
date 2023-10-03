@@ -1,0 +1,63 @@
+{
+	"welcome": "ಸ್ವಾಗತ",
+	"errors": {
+		"IVE": {
+			"message": "ಮಾದರಿ ದೋಷ ಸಂದೇಶ",
+			"code": "ಮಾದರಿ ದೋಷ"
+		},
+		"names": {
+			"Test": "ಪರೀಕ್ಷೆ",
+			"AE": "errors.names.AE",
+			"Invalid JSON Schema": "errors.names.Invalid JSON Schema",
+			"Unauthorized Request": "errors.names.Unauthorized Request",
+			"entity extended data is invalid": "errors.names.entity extended data is invalid",
+			"phone number is not unique": "errors.names.phone number is not unique",
+			"Permission Denied": "errors.names.Permission Denied",
+			"Organziation Mismatch": "errors.names.Organziation Mismatch",
+			"Not a valid Organziation": "errors.names.Not a valid Organziation",
+			"Not a valid webhook event": "errors.names.Not a valid webhook event",
+			"undefined": "errors.names.undefined"
+		},
+		"IVA": {
+			"message": "errors.IVA.message",
+			"code": "errors.IVA.code"
+		},
+		"EVENTS001": {
+			"message": "errors.EVENTS001.message",
+			"code": "errors.EVENTS001.code"
+		},
+		"INF": {
+			"message": "ಗುರುತಿಸುವಿಕೆಯು ಕಂಡುಬಂದಿಲ್ಲ"
+		},
+		"UNAUTHORIZED_REQUEST": {
+			"message": "errors.UNAUTHORIZED_REQUEST.message",
+			"code": "errors.UNAUTHORIZED_REQUEST.code"
+		},
+		"cust001": {
+			"message": "errors.cust001.message",
+			"code": "errors.cust001.code"
+		},
+		"extend001": {
+			"message": "errors.extend001.message",
+			"code": "errors.extend001.code"
+		},
+		"PERMISSIONS_DENIED": {
+			"message": "errors.PERMISSIONS_DENIED.message",
+			"code": "errors.PERMISSIONS_DENIED.code"
+		},
+		"ORGANIZATION_MISMATCH": {
+			"message": "errors.ORGANIZATION_MISMATCH.message",
+			"code": "errors.ORGANIZATION_MISMATCH.code"
+		},
+		"ORGANIZATION_INVALID": {
+			"message": "errors.ORGANIZATION_INVALID.message",
+			"code": "errors.ORGANIZATION_INVALID.code"
+		},
+		"WEBHOOK_EVENT_TYPE_INVALID": {
+			"message": "errors.WEBHOOK_EVENT_TYPE_INVALID.message",
+			"code": "errors.WEBHOOK_EVENT_TYPE_INVALID.code"
+		},
+		"ReferenceError": " _config is not defined.message",
+		"Error": " Configuration property \"SALT_WORK_FACTOR\" is not defined.message"
+	}
+}

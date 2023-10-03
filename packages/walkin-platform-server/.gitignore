@@ -1,0 +1,15 @@
+.idea/
+node_modules/
+build/
+tmp/
+temp/
+.DS_Store
+dist/
+logs/
+swagger.yml
+
+.env
+
+private/*
+
+log

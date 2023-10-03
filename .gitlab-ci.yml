@@ -1,0 +1,258 @@
+build-develop:
+  image: docker:20-git
+  stage: build
+  services:
+    - docker:20-dind
+    - redis:alpine
+  tags:
+    - alpine
+    - peppo
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    NODE_OPTIONS: --max_old_space_size=4096
+    TYPEORM_CONNECTION: sqlite
+    TYPEORM_DATABASE: ':memory:'
+    TYPEORM_PORT: 3306
+    TYPEORM_LOGGING: 'false'
+    TYPEORM_SYNCHRONIZE: 'true'
+    JWT_ISSUER: Walkin
+    JWT_EXPIRES_IN: 48h
+    JWT_ALGORITHM: RS256
+    API_ISSUER: Walkin
+    API_EXPIRES_IN: 365d
+    API_ALGORITHM: RS256
+    SALT_WORK_FACTOR: 10
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    CUSTOMER_SESSION_JWT_EXPIRES_IN: 2d
+    FIREBASE_LINK_PREFIX: https://wcore.page.link
+    FIREBASE_DYNAMIC_LINK_API_URL: https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=
+    FIREBASE_API_KEY: AIzaSyAAv42gPpFcs9wmzzL9lpplHcnCoyFDg38
+    TYPEORM_DROP_SCHEMA: 'true'
+    VM2_LOAD_MODULES: '["lodash"]'
+    VM2_LOAD_MODULES_PATH: ./node_modules
+    CONSOLE_URL: http://console-dev.getwalkin.in/
+    CONFIRM_EMAIL_URL_PREFIX: confirm
+    VERIFY_EMAIL_URL_PREFIX: verify
+    WCORE_USER_AUTO_CONFIRM: 1
+    WALKIN_COMMS_CONSUMER_NAME_DEFAULT: wcore
+    WALKIN_COMMS_CHANNEL_NAME_PUSH_DEFAULT: push
+    WALKIN_COMMS_CHANNEL_NAME_SMS_DEFAULT: sms_mgage_2
+    WALKIN_COMMS_CHANNEL_NAME_EMAIL_DEFAULT: email
+    RAZOR_PAY_URL: https://api.razorpay.com/v1/
+    RAZOR_PAY_URL_BETA: https://api.razorpay.com/v1/beta/
+    RAZOR_PAY_API_KEY_ID: rzp_test_kKkHVZxKhAhpy8
+    RAZOR_PAY_API_SECRED_KEY: xbQ0LRDWzFZMSsADMxfrszqB
+    LAMBDA_GATEWAY_URL: https://o5p6sgdsj0.execute-api.ap-south-1.amazonaws.com/develop/
+    LAMBDA_GATEWAY_AUTH_KEY: bGqtFnlflI6fhEm5nS3oc7ddAz8Ws87z363KwnG2
+    DELIVERY_SERVICE_URL: https://4c741a49-d341-4065-bdfc-47862f99e45c.mock.pstmn.io/
+    DELIVERY_SERVICE_AUTH_KEY: PMAK-5fad0ac590dfdb00434059ea-8fbdbb5b952ef814524f29c46e7f83e571
+    PREFERRED_DELIVERY_PARTNER: https://api.sandbox.beckn.juspay.in/dev/mock/provider/v1
+    ELIGIBLE_STORE: 323a1411-5bbe-48ea-b39f-09917b107a52
+    EMAIL_SUFFIX: peppo.co.in
+    REFUND_PROCESSING : 'false'
+  cache:
+    paths:
+    - node_modules/
+  before_script:
+    - printenv
+    - docker info
+    - apk update && apk add --no-cache curl yarn
+  script:
+    - docker login $CI_REGISTRY -u $CI_DEPLOY_USER_2 -p $CI_DEPLOY_PASSWORD_2
+    - apk update && apk upgrade
+    - apk add curl 
+    - echo $CI_COMMIT_SHORT_SHA $CI_MERGE_REQUEST_MILESTONE
+    - docker build --rm -t registry.gitlab.com/walkin/peppo-rewardx:develop --build-arg SERVER_RELEASE_VERSION=$CI_COMMIT_SHORT_SHA .
+    - docker push registry.gitlab.com/walkin/peppo-rewardx:develop
+    - curl -X POST https://walkin_jenkins:117c42b3496839cc3e9331bd1f06db98af@build.getwalkin.in/job/peppo-rewardx-develop/build?token=34c6dc8d5bbfd4c58977e98dbe45c247960958dfe5422dfaf0aa2cc671def952
+  only:
+    - develop
+
+pages:
+  image: docker:20-git
+  stage: build
+  services:
+    - docker:20-dind
+  script:
+    - cp -r docs public
+  artifacts:
+    paths:
+      - public
+  only:
+    - develop
+
+build-master:
+  image: docker:20-git
+  stage: build
+  services:
+    - docker:20-dind
+    - redis:alpine
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    NODE_OPTIONS: --max_old_space_size=4096
+    TYPEORM_CONNECTION: sqlite
+    TYPEORM_DATABASE: ':memory:'
+    TYPEORM_PORT: 3306
+    TYPEORM_LOGGING: 'false'
+    TYPEORM_SYNCHRONIZE: 'true'
+    JWT_ISSUER: Walkin
+    JWT_EXPIRES_IN: 48h
+    JWT_ALGORITHM: RS256
+    API_EXPIRES_IN: 365d
+    API_ALGORITHM: RS256
+    SALT_WORK_FACTOR: 10
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    CUSTOMER_SESSION_JWT_EXPIRES_IN: 2d
+    FIREBASE_LINK_PREFIX: https://wcore.page.link
+    FIREBASE_DYNAMIC_LINK_API_URL: https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=
+    FIREBASE_API_KEY: AIzaSyAAv42gPpFcs9wmzzL9lpplHcnCoyFDg38
+    TYPEORM_DROP_SCHEMA: 'true'
+    VM2_LOAD_MODULES: '["lodash"]'
+    VM2_LOAD_MODULES_PATH: ./node_modules
+    CONSOLE_URL: http://console-dev.getwalkin.in/
+    CONFIRM_EMAIL_URL_PREFIX: confirm
+    VERIFY_EMAIL_URL_PREFIX: verify
+    WCORE_USER_AUTO_CONFIRM: 1
+    WALKIN_COMMS_CONSUMER_NAME_DEFAULT: wcore
+    WALKIN_COMMS_CHANNEL_NAME_PUSH_DEFAULT: push
+    WALKIN_COMMS_CHANNEL_NAME_SMS_DEFAULT: sms_mgage_2
+    WALKIN_COMMS_CHANNEL_NAME_EMAIL_DEFAULT: email
+    RAZOR_PAY_URL: https://api.razorpay.com/v1/
+    RAZOR_PAY_URL_BETA: https://api.razorpay.com/v1/beta/
+    RAZOR_PAY_API_KEY_ID: rzp_test_kKkHVZxKhAhpy8
+    RAZOR_PAY_API_SECRED_KEY: xbQ0LRDWzFZMSsADMxfrszqB
+    LAMBDA_GATEWAY_URL: https://o5p6sgdsj0.execute-api.ap-south-1.amazonaws.com/develop/
+    LAMBDA_GATEWAY_AUTH_KEY: bGqtFnlflI6fhEm5nS3oc7ddAz8Ws87z363KwnG2
+    DELIVERY_SERVICE_URL: https://4c741a49-d341-4065-bdfc-47862f99e45c.mock.pstmn.io/
+    DELIVERY_SERVICE_AUTH_KEY: PMAK-5fad0ac590dfdb00434059ea-8fbdbb5b952ef814524f29c46e7f83e571
+    PREFERRED_DELIVERY_PARTNER: https://api.sandbox.beckn.juspay.in/dev/mock/provider/v1
+    ELIGIBLE_STORE: 323a1411-5bbe-48ea-b39f-09917b107a52
+    EMAIL_SUFFIX: peppo.co.in
+    REFUND_PROCESSING : 'false'
+
+  cache:
+    paths:
+    - node_modules/
+  before_script:
+    - printenv
+    - docker info
+    - apk update && apk add --no-cache curl
+  script:
+    - docker login $CI_REGISTRY -u $CI_DEPLOY_USER_2 -p $CI_DEPLOY_PASSWORD_2
+    - apk update && apk upgrade
+    - apk add curl
+    - echo $CI_COMMIT_SHORT_SHA $CI_MERGE_REQUEST_MILESTONE
+    - docker build --rm -t registry.gitlab.com/walkin/peppo-rewardx:master --build-arg SERVER_RELEASE_VERSION=$CI_COMMIT_SHORT_SHA .
+    - docker push registry.gitlab.com/walkin/peppo-rewardx:master
+    - curl -X POST https://walkin_jenkins:117c42b3496839cc3e9331bd1f06db98af@build.getwalkin.in/job/peppo-rewardx-master/build?token=ndi98y4hrnekfi0vkjerujhknt09903ntkjfdvn
+  only:
+    - master
+
+
+
+build-peppo-prod:
+  image: docker:20-git
+  stage: build
+  services:
+    - docker:20-dind
+    - redis:alpine
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    NODE_OPTIONS: --max_old_space_size=4096
+    TYPEORM_CONNECTION: sqlite
+    TYPEORM_DATABASE: ':memory:'
+    TYPEORM_PORT: 3306
+    TYPEORM_LOGGING: 'false'
+    TYPEORM_SYNCHRONIZE: 'true'
+    JWT_ISSUER: Walkin
+    JWT_EXPIRES_IN: 48h
+    JWT_ALGORITHM: RS256
+    API_ISSUER: Walkin
+    API_EXPIRES_IN: 365d
+    API_ALGORITHM: RS256
+    SALT_WORK_FACTOR: 10
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    CUSTOMER_SESSION_JWT_EXPIRES_IN: 2d
+    FIREBASE_LINK_PREFIX: https://wcore.page.link
+    FIREBASE_DYNAMIC_LINK_API_URL: https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=
+    FIREBASE_API_KEY: AIzaSyAAv42gPpFcs9wmzzL9lpplHcnCoyFDg38
+    TYPEORM_DROP_SCHEMA: 'true'
+    VM2_LOAD_MODULES: '["lodash"]'
+    VM2_LOAD_MODULES_PATH: ./node_modules
+    CONSOLE_URL: http://console-dev.getwalkin.in/
+    CONFIRM_EMAIL_URL_PREFIX: confirm
+    VERIFY_EMAIL_URL_PREFIX: verify
+    WCORE_USER_AUTO_CONFIRM: 1
+    WALKIN_COMMS_CONSUMER_NAME_DEFAULT: wcore
+    WALKIN_COMMS_CHANNEL_NAME_PUSH_DEFAULT: push
+    WALKIN_COMMS_CHANNEL_NAME_SMS_DEFAULT: sms_mgage_2
+    WALKIN_COMMS_CHANNEL_NAME_EMAIL_DEFAULT: email
+    RAZOR_PAY_URL: https://api.razorpay.com/v1/
+    RAZOR_PAY_URL_BETA: https://api.razorpay.com/v1/beta/
+    RAZOR_PAY_API_KEY_ID: rzp_test_kKkHVZxKhAhpy8
+    RAZOR_PAY_API_SECRED_KEY: xbQ0LRDWzFZMSsADMxfrszqB
+    LAMBDA_GATEWAY_URL: https://o5p6sgdsj0.execute-api.ap-south-1.amazonaws.com/develop/
+    LAMBDA_GATEWAY_AUTH_KEY: bGqtFnlflI6fhEm5nS3oc7ddAz8Ws87z363KwnG2
+    DELIVERY_SERVICE_URL: https://4c741a49-d341-4065-bdfc-47862f99e45c.mock.pstmn.io/
+    DELIVERY_SERVICE_AUTH_KEY: PMAK-5fad0ac590dfdb00434059ea-8fbdbb5b952ef814524f29c46e7f83e571
+    PREFERRED_DELIVERY_PARTNER: https://api.sandbox.beckn.juspay.in/dev/mock/provider/v1
+    ELIGIBLE_STORE: 323a1411-5bbe-48ea-b39f-09917b107a52
+    EMAIL_SUFFIX: peppo.co.in
+    REFUND_PROCESSING : 'false'
+  cache:
+    paths:
+    - node_modules/
+  before_script:
+    - printenv
+    - docker info
+    - apk update && apk add --no-cache curl yarn
+  script:
+    - docker login $CI_REGISTRY -u $CI_DEPLOY_USER_2 -p $CI_DEPLOY_PASSWORD_2
+    - apk update && apk upgrade
+    - apk add curl
+    - echo $CI_COMMIT_SHORT_SHA $CI_MERGE_REQUEST_MILESTONE
+    - docker build --rm -t registry.gitlab.com/walkin/peppo-rewardx:production --build-arg SERVER_RELEASE_VERSION=$CI_COMMIT_SHORT_SHA . 
+    - docker push registry.gitlab.com/walkin/peppo-rewardx:production
+    - timestamp=$(date +%Y_%m_%d_%H_%M)
+  only:
+    - production
+
+
+#production
+docker-build-production-gt:
+  image: docker:18-git
+  stage: build
+  services:
+    - docker:18-dind
+  variables:
+    REPOSITORY_URL: 837526077518.dkr.ecr.ap-south-1.amazonaws.com/gt-rewardx
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - printenv
+    - docker info
+    - apk update && apk add --no-cache curl yarn
+    - apk add --no-cache python3 py3-pip && pip3 install --upgrade pip && pip3 install --no-cache-dir awscli
+
+  script:
+    - apk update && apk upgrade
+    - DATE=$(date +%Y_%m_%d_%H_%M)
+    - echo $CI_COMMIT_SHORT_SHA $CI_MERGE_REQUEST_MILESTONE
+    - $(aws ecr get-login --no-include-email --region ap-south-1)
+    - docker build --rm -t $REPOSITORY_URL:latest --build-arg SERVER_RELEASE_VERSION=$CI_COMMIT_SHORT_SHA --build-arg SERVER_RELEASE_VERSION_LONG=$CI_COMMIT_SHA .
+    - docker tag $REPOSITORY_URL:latest $REPOSITORY_URL:$DATE
+    - docker push $REPOSITORY_URL:latest
+    - docker push $REPOSITORY_URL:$DATE
+
+  only:
+    - gt_rewardx_production

@@ -1,0 +1,82 @@
+version: "3"
+services:
+  redis_cache:
+    image: redis:alpine
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+    networks:
+      - wcore
+
+  walkin_server:
+    build: ./
+    image: walkin_server_image
+    depends_on:
+      - redis_cache
+    ports:
+      - 4000:4000
+    environment:
+      - TYPEORM_CONNECTION=mysql
+      - TYPEORM_HOST =localhost
+      - TYPEORM_USERNAME =root
+      - TYPEORM_PASSWORD =password
+      - TYPEORM_DATABASE =walkin_dev_db
+      - TYPEORM_PORT =3306
+      - TYPEORM_LOGGING =false
+      - REDIS_HOST=redis_cache
+      - REDIS_PORT=6379
+      - CLICKHOUSE_BASICAUTH_USERNAME=default
+      - CLICKHOUSE_BASICAUTH_PASSWORD=BQDAN63iw86Q6LE
+      - CLICKHOUSE_URL=http://167.71.237.251
+      - CLICKHOUSE_DATABASE=wcore_warehouse_test
+      - CLICKHOUSE_PORT=8123
+      - JWT_ISSUER=Walkin
+      - JWT_EXPIRES_IN=48h
+      - JWT_ALGORITHM=RS256
+      - API_ISSUER=Walkin
+      - API_EXPIRES_IN=365d
+      - API_ALGORITHM=RS256
+      - SALT_WORK_FACTOR=10
+      - LOGGING_TRANSPORT_FILENAME=wcore-services-%DATE%.log
+      - LOGGING_TRANSPORT_DATE_PATTERN=YYYY-MM-DD-HH
+      - LOGGING_TRANSPORT_ZIPPED_ARCHIVE=true
+      - LOGGING_TRANSPORT_MAX_SIZE=100m
+      - LOGGING_TRANSPORT_MAX_FILES=365d
+      - SENTRY_DSN=https://677439d5e37c44b4a2036a941461a937@sentry.io/1526382
+      - DIGDAG_URL=http://localhost:65432
+      - DIGDAG_USERNAME=
+      - DIGDAG_PASSWORD=
+      - TZ =UTC
+      - PUBLIC_KEY=-----BEGIN PUBLIC KEY-----MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJCE83HeX3Wr5gsxBI9lHbB5zEi+opATEm+xwYXCEbIa/SAnh9ciHKcE+fiR6PStOKKYeBTTL05B1wTqVJOgNtcCAwEAAQ==-----END PUBLIC KEY-----
+      - FIREBASE_LINK_PREFIX=https://wcore.page.link
+      - FIREBASE_DYNAMIC_LINK_API_URL=https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=
+      - FIREBASE_API_KEY=AIzaSyAAv42gPpFcs9wmzzL9lpplHcnCoyFDg38
+      - CUSTOMER_SESSION_JWT_EXPIRES_IN=2d
+      #AWS_ACCESS_KEY_ID=AKIAJMQUUV2M2U6HO3JQ
+      #AWS_SECRET_ACCESS_KEY=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
+      #CLOUDINARY_URL=cloudinary://643872291836123:_UHu259sZr2200hJM3w1ml345ig@ccdapp
+      - LOG_ERROR_FILE_PATH=./log/walkin-core/core-error
+      - LOG_INFO_FILE_PATH=./log/walkin-core/core-info
+      - LOG_EXCEPTION_FILE_PATH=./log/walkin-core/core-exception
+    command: sh -c 'yarn start:server'
+    networks:
+      - wcore
+
+  queue:
+    image: walkin_server_image
+    depends_on:
+      - walkin_server
+      - redis_cache
+    ports:
+      - 4567:4567
+    environment:
+      - REDIS_HOST=redis_cache
+      - REDIS_PORT=6379
+      - NODE_ENV=production
+    networks:
+      - wcore
+    command: sh -c 'yarn start:queue'
+
+networks:
+  wcore:

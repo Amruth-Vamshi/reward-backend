@@ -1,0 +1,59 @@
+{
+  "name": "@walkinserver/walkin-rewardx",
+  "version": "0.1.0",
+  "description": "Rewardx platform from walkin. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "src",
+    "tests"
+  ],
+  "author": "saikrishna",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-codegen/cli": "1.9.1",
+    "@graphql-codegen/schema-ast": "1.9.1",
+    "@graphql-codegen/typescript": "1.9.1",
+    "@graphql-codegen/typescript-resolvers": "1.9.1",
+    "@graphql-modules/core": "^0.7.10",
+    "@graphql-modules/di": "^0.7.10",
+    "@types/multer": "^1.4.7",
+    "@walkinserver/walkin-core": "*",
+    "ajv": "^8.11.2",
+    "apollo-link": "1.2.12",
+    "apollo-link-http": "1.5.15",
+    "bull": "4.2.0",
+    "csvtojson": "^2.0.10",
+    "graphql": "^14.1.1",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-tag": "^2.10.1",
+    "graphql-tag-pluck": "^0.8.4",
+    "http-status-codes": "^1.3.2",
+    "i18n": "^0.8.3",
+    "ioredis": "^4.9.0",
+    "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "multer": "^1.4.5-lts.1",
+    "mustache": "^3.0.1",
+    "node-fetch": "^2.6.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "0.2.24",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/ioredis": "^4.0.10",
+    "@types/jest": "25.1.2",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/lodash": "^4.14.123",
+    "@types/node": "^8.0.29",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.1.0",
+    "jest": "25.1.0",
+    "ts-jest": "25.2.0"
+  }
+}

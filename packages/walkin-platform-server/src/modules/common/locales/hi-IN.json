@@ -1,0 +1,184 @@
+{
+	"errors": {
+		"ReferenceError": " salt is not defined.message",
+		"names": {
+			"undefined": "errors.names.undefined",
+			"Not a valid Organziation": "errors.names.Not a valid Organziation",
+			"Unauthorized Request": "errors.names.Unauthorized Request",
+			"Not a valid RuleConfiguration": "errors.names.Not a valid RuleConfiguration",
+			"Not a valid Application": "errors.names.Not a valid Application",
+			"Not a valid Campaign": "errors.names.Not a valid Campaign",
+			"Not a valid Segment": "errors.names.Not a valid Segment",
+			"Not a valid ActionDefinition": "errors.names.Not a valid ActionDefinition",
+			"Not a valid Campaign Segment": "errors.names.Not a valid Campaign Segment",
+			"RESOURCE NOT PERMITTED": "errors.names.RESOURCE NOT PERMITTED",
+			"Not a valid MEtric": "errors.names.Not a valid MEtric",
+			"Not a valid Metric Filter": "errors.names.Not a valid Metric Filter",
+			"phone number is not unique": "errors.names.phone number is not unique",
+			"Not a valid event type": "errors.names.Not a valid event type",
+			"Not a valid webhook event": "errors.names.Not a valid webhook event",
+			"Template Variable or default value Required": "errors.names.Template Variable or default value Required",
+			"Not a valid Rule": "errors.names.Not a valid Rule",
+			"Not a valid Customer": "errors.names.Not a valid Customer",
+			"Not a valid workflow": "errors.names.Not a valid workflow",
+			"Zero eligible process": "errors.names.Zero eligible process",
+			"Permission Denied": "errors.names.Permission Denied",
+			"customer identifier is not unique": "errors.names.customer identifier is not unique",
+			"entity extended data is invalid": "errors.names.entity extended data is invalid",
+			"AE": "errors.names.AE",
+			"Customer Device does not exist": "errors.names.Customer Device does not exist",
+			"Not a valid JSON for headers": "errors.names.Not a valid JSON for headers",
+			"Id is mandatory": "errors.names.Id is mandatory",
+			"No valid workflow availabe": "errors.names.No valid workflow availabe",
+			"Key needs to lower case character, number or _": "errors.names.Key needs to lower case character, number or _",
+			"Not a valid Message Template": "errors.names.Not a valid Message Template",
+			"Not a valid Communication": "errors.names.Not a valid Communication",
+			"FileSystem not found": "errors.names.FileSystem not found",
+			"Inavlid access to organization ID": "errors.names.Inavlid access to organization ID",
+			"Invalid organization id": "errors.names.Invalid organization id"
+		},
+		"ORGANIZATION_INVALID": {
+			"message": "errors.ORGANIZATION_INVALID.message",
+			"code": "errors.ORGANIZATION_INVALID.code"
+		},
+		"APPLICATION_INVALID": {
+			"message": "errors.APPLICATION_INVALID.message",
+			"code": "errors.APPLICATION_INVALID.code"
+		},
+		"CAMPAIGN_INVALID": {
+			"message": "errors.CAMPAIGN_INVALID.message",
+			"code": "errors.CAMPAIGN_INVALID.code"
+		},
+		"SEGMENT_INVALID": {
+			"message": "errors.SEGMENT_INVALID.message",
+			"code": "errors.SEGMENT_INVALID.code"
+		},
+		"ACTION_DEFNITION_INVALID": {
+			"message": "errors.ACTION_DEFNITION_INVALID.message",
+			"code": "errors.ACTION_DEFNITION_INVALID.code"
+		},
+		"CAMPAIGN__SEGMENT_INVALID": {
+			"message": "errors.CAMPAIGN__SEGMENT_INVALID.message",
+			"code": "errors.CAMPAIGN__SEGMENT_INVALID.code"
+		},
+		"START_TIME_SHOULD_BE_LATER_THAN_NOW": {
+			"message": "errors.START_TIME_SHOULD_BE_LATER_THAN_NOW.message",
+			"code": "errors.START_TIME_SHOULD_BE_LATER_THAN_NOW.code"
+		},
+		"END_TIME_SHOULD_BE_LATER_THAN_START_TIME": {
+			"message": "errors.END_TIME_SHOULD_BE_LATER_THAN_START_TIME.message",
+			"code": "errors.END_TIME_SHOULD_BE_LATER_THAN_START_TIME.code"
+		},
+		"UNAUTHORIZED": {
+			"message": "errors.UNAUTHORIZED.message",
+			"code": "errors.UNAUTHORIZED.code"
+		},
+		"METRIC_INVALID": {
+			"message": "errors.METRIC_INVALID.message",
+			"code": "errors.METRIC_INVALID.code"
+		},
+		"METRIC_FILTER_INVALID": {
+			"message": "errors.METRIC_FILTER_INVALID.message",
+			"code": "errors.METRIC_FILTER_INVALID.code"
+		},
+		"cus001": {
+			"message": "errors.cus001.message",
+			"code": "errors.cus001.code"
+		},
+		"EVENT_TYPE_INVALID": {
+			"message": "errors.EVENT_TYPE_INVALID.message",
+			"code": "errors.EVENT_TYPE_INVALID.code"
+		},
+		"WEBHOOK_EVENT_TYPE_INVALID": {
+			"message": "errors.WEBHOOK_EVENT_TYPE_INVALID.message",
+			"code": "errors.WEBHOOK_EVENT_TYPE_INVALID.code"
+		},
+		"TEMPLATE_VARIABLE_REQUIRED": {
+			"message": "errors.TEMPLATE_VARIABLE_REQUIRED.message",
+			"code": "errors.TEMPLATE_VARIABLE_REQUIRED.code"
+		},
+		"API Key Not found": {
+			"message": "errors.API Key Not found.message",
+			"code": "errors.API Key Not found.code"
+		},
+		"API Key Not foundsss": {
+			"message": "errors.API Key Not foundsss.message",
+			"code": "errors.API Key Not foundsss.code"
+		},
+		"UNAUTHORIZED_REQUEST": {
+			"message": "errors.UNAUTHORIZED_REQUEST.message",
+			"code": "errors.UNAUTHORIZED_REQUEST.code"
+		},
+		"No Auth": {
+			"message": "errors.No Auth.message",
+			"code": "errors.No Auth.code"
+		},
+		"Invalid Auth Token": {
+			"message": "errors.Invalid Auth Token.message",
+			"code": "errors.Invalid Auth Token.code"
+		},
+		"RULE_CONFIGURATION_INVALID": {
+			"message": "errors.RULE_CONFIGURATION_INVALID.message",
+			"code": "errors.RULE_CONFIGURATION_INVALID.code"
+		},
+		"RULE_INVALID": {
+			"message": "errors.RULE_INVALID.message",
+			"code": "errors.RULE_INVALID.code"
+		},
+		"INF": {
+			"message": "errors.INF.message"
+		},
+		"WORKFLOW_INVALID": {
+			"message": "errors.WORKFLOW_INVALID.message",
+			"code": "errors.WORKFLOW_INVALID.code"
+		},
+		"WRONG_PROCESS_SETUP": {
+			"message": "errors.WRONG_PROCESS_SETUP.message",
+			"code": "errors.WRONG_PROCESS_SETUP.code"
+		},
+		"PERMISSIONS_DENIED": {
+			"message": "errors.PERMISSIONS_DENIED.message",
+			"code": "errors.PERMISSIONS_DENIED.code"
+		},
+		"TypeError": " Cannot convert object to primitive value.message",
+		"Error": " rounds must be a number.message",
+		"cust005": {
+			"message": "errors.cust005.message",
+			"code": "errors.cust005.code"
+		},
+		"INVALID_JSON": {
+			"message": "errors.INVALID_JSON.message",
+			"code": "errors.INVALID_JSON.code"
+		},
+		"cust004": {
+			"message": "errors.cust004.message",
+			"code": "errors.cust004.code"
+		},
+		"INVALID_KEY": {
+			"message": "errors.INVALID_KEY.message",
+			"code": "errors.INVALID_KEY.code"
+		},
+		"MESSAGETEMPLATE_INVALID": {
+			"message": "errors.MESSAGETEMPLATE_INVALID.message",
+			"code": "errors.MESSAGETEMPLATE_INVALID.code"
+		},
+		"FILE_SYSTEM_NOT_FOUND": {
+			"message": "errors.FILE_SYSTEM_NOT_FOUND.message",
+			"code": "errors.FILE_SYSTEM_NOT_FOUND.code"
+		},
+		"INVALID_ACCESS_ORGANIZATION_ID": {
+			"message": "errors.INVALID_ACCESS_ORGANIZATION_ID.message",
+			"code": "errors.INVALID_ACCESS_ORGANIZATION_ID.code"
+		},
+		"cust003": {
+			"message": "errors.cust003.message",
+			"code": "errors.cust003.code"
+		},
+		"INVALID_ORGANIZATION_ID": {
+			"message": "errors.INVALID_ORGANIZATION_ID.message",
+			"code": "errors.INVALID_ORGANIZATION_ID.code"
+		}
+	},
+	"errors.names.Start time should be greater than today.": "errors.names.Start time should be greater than today.",
+	"errors.names.Active session exists for the customer and organization combination.": "errors.names.Active session exists for the customer and organization combination."
+}
